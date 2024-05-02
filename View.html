@@ -1,0 +1,290 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>NCEI Geomagnetic Calculators</title>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    
+      <link href="static/HHoGZ6w7cMR9gU1PBeUqOY5nrCCEUzb6Lw4HHIM4igS.css" type="text/css" rel="stylesheet" media="screen, projection" />
+<script src="static/jquery.js" type="text/javascript" ></script>
+<link href="static/HzofhfIaCHelP4bXCSdeJDML0s6ZP2GUEtsbHFYogVD.css" type="text/css" rel="stylesheet" media="screen, projection" />
+<link href="static/cwhpUmpOyp9YxeDjTrDsiW5lAic9NUH5oafhv0atrPL.css" type="text/css" rel="stylesheet" media="screen, projection" />
+<link href="static/zyXZ1TKF08oaRnTHGNmzYBiYfa7xHUlytVhgILiQK7.css" type="text/css" rel="stylesheet" media="screen, projection" />
+<link href="static/sXeE1zeZNN9e1TGrhMwMIrENu9jMGRFgjTwBw7Pq0J7.css" type="text/css" rel="stylesheet" media="screen, projection" />
+<link href="static/6qpPsRruEHnHkyKWGG5aubna1ffnqodKjkeKWFU2p7b.css" type="text/css" rel="stylesheet" media="screen, projection" />
+<link href="static/7a9omosLeP7QBXaJBzv4fy6YKl61VFbRN5iBHAuyjoQ.css" type="text/css" rel="stylesheet" media="screen, projection" />
+<link href="static/hGRqElavlN8Qo2u6VS8fZfBppxtNEgUhQAS4N99IaEm.css" type="text/css" rel="stylesheet" media="screen, projection" />
+<link href="static/R74iISjeDA5FOWwY2z8CoxDpEQR93YqvHwaDxqnjL2c.css" type="text/css" rel="stylesheet" media="screen, projection" />
+<script src="static/UZASVNOBz1m14bcQoTrTdhqoNGO2z1ew4yg8fJfdfve.js" type="text/javascript" ></script>
+<link href="static/jquery-ui.css" type="text/css" rel="stylesheet" media="screen, projection" />
+
+<link href="static/ouPHbs5xBHddDMfkcgTm9OgAFdqHG4cWNLq5cFbhEpg.css" type="text/css" rel="stylesheet" media="screen, projection" />
+<script src="static/0Ngb35yQXTsO0KPrYUYO3twcrXFHFYbMl19vyGTtfKo.js" type="text/javascript" ></script>
+<script src="static/jspdf.js" type="text/javascript" ></script>
+ <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.3/proj4-src.js"></script>
+   
+    <link rel="shortcut icon" type="image/x-icon" href="//www.ngdc.noaa.gov/favicon.ico" />
+
+    
+<!--        -->
+    
+
+    
+
+    
+    
+
+    <meta name="DC.title" content="NCEI Geomagnetic Calculators" />
+    <meta name="DC.creator" content="National Geophysical Data Center" />
+    <meta name="DC.description" content="NOAA's National Centers for Environmental Information (NCEI), formerly the National Geophysical Data Center, and the collocated World Data Service for Geophysics, Boulder, operated by NOAA/NESDIS/NCEI, archive and make available geomagnetic data and information relating to Earth's magnetic field and Earth-Sun environment, including current declination, geomagnetic field models and magnetic indices, geomagnetic observatory data, and geomagnetic surveys." />
+    <meta name="DC.publisher" content="U.S. Department of Commerce" />
+    <meta name="DC.publisher" content="National Oceanic and Atmospheric Administration (NOAA)" />
+    <meta name="DC.publisher" content="National Environmental Satellite, Data, and Information Service (NESDIS)" />
+    <meta name="DC.publisher" content="National Geophysical Data Center (NGDC)" />
+    <meta name="DC.subject" scheme="ISO19115" content="geoscientificInformation" />
+    <meta name="DC.language" scheme="DCTERMS.RFC1766" content="EN-US" />
+    
+    <meta name="DC.publisher" content="World Data Service for Geophysics, Boulder" />
+    
+
+    <meta name="keywords" content="magnetic field, geomagnetism, IGRF, WMM, magnetic model, declination, inclination, horizontal intensity, total intensity" />
+    <meta name="questions" content="geomag.models" />
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+      
+    
+
+    
+      
+    
+
+    
+      
+      <link rel="stylesheet" type="text/css" href="static/cwhpUmpOyp9YxeDjTrDsiW5lAic9NUH5oafhv0atrPL.css" />
+ 
+        
+        <meta name="layout" content="geomag"/>
+ 
+ 
+        
+    
+
+  
+
+  </head>
+  <body class="body">
+    
+  <div class="container headerContainer">
+    <div class="span-12 alignLeft">
+  <a href="//www.ngdc.noaa.gov" title="go to the National Centers for Environmental Information (formerly the National Geophysical Data Center) home" target="_blank">
+    <img src="//www.ngdc.noaa.gov/image/nesdisngdcleft.gif" alt="NCEI (formerly NGDC)" />
+  </a>
+</div>
+
+
+  </div>
+  <div class="container mainContainer">
+    <div class="span-19 menubar">
+      
+        
+        &nbsp;<a href="//www.noaa.gov/" title="National Oceanic &amp; Atmospheric Administration" class="topnav">NOAA</a> &gt; <a href="//www.nesdis.noaa.gov/" title="NOAA Satellite &amp; Information Service" class="topnav">NESDIS</a> &gt; <a href="/" title="go to the National Centers for Environmental Information (formerly the National Geophysical Data Center) home" class="topnav">NCEI (formerly NGDC)</a> &gt; <a href="//www.ngdc.noaa.gov/geomag/" title="Geomagnetism" class="topnav">Geomagnetism</a>
+    
+      
+      
+      &nbsp;
+    </div>
+    <div class="span-5 alignRight last">
+      <div id="logoutAndFeed">
+        <table style="border:0px;">
+          <tr>
+            <td style="text-align:right;">
+              
+              &nbsp;
+              
+            </td>
+            <td style="text-align:right; ">
+              
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="span-24">
+      
+
+  
+    
+    
+    <div class="span-24 alignCenter last">
+        <h1>Magnetic Field Calculators</h1>
+    </div>
+    <p>
+
+
+<span id="declination" class="topAnchor">&nbsp;</span>
+<span id="ushistoric" class="topAnchor">&nbsp;</span>
+<span id="igrfwmm" class="topAnchor">&nbsp;</span>
+<span id="igrfgrid" class="topAnchor">&nbsp;</span>
+<span id="bearing" class="topAnchor">&nbsp;</span>
+
+
+<div class="tabset" id="geomagCalculators">
+	<div id="declinationContents"></div>
+    <a id="declinationTab" href="#declination" class="tab {content:'declinationContents', ajaxContent:'declinationForm.shtml'}">Declination</a>
+
+    <div id="ushistoricContents"></div>
+    <a id="ushistoricTab" href="#ushistoric" class="tab {content:'ushistoricContents', ajaxContent:'ushistoricForm.shtml'}">U.S. Historic Declination</a>
+
+    <div id="igrfwmmContents"></div>
+    <a id="igrfwmmTab" href="#igrfwmm" class="tab {content:'igrfwmmContents', ajaxContent:'igrfwmmForm.shtml'}">Magnetic Field</a>
+
+    <div id="igrfgridContents"></div>
+    <a id="igrfgridTab" href="#igrfgrid" class="tab {content:'igrfgridContents', ajaxContent:'igrfgridForm.shtml'}">Magnetic Field Component Grid</a>
+
+ <div id="bearingContents"></div>
+    <a id="bearingTab" href="#bearing" class="tab {content:'bearingContents', ajaxContent:'bearingForm.shtml'}"> Correct My Compass</a>
+
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+
+ <a id="registration_link" style="padding: 1px 15px; " class='btn btn-primary' href="../CalcSurvey.shtml">Registration</a> 
+
+</div>
+
+
+
+    
+
+  
+      
+    </div>
+
+  </div>
+  <div>
+    
+      <div class="container footerContainer">
+        <div class="span-12 alignLeft">
+    &nbsp;<a href="//www.noaa.gov/" title="National Oceanic &amp; Atmospheric Administration" class="topnav">NOAA</a> &gt; <a href="//www.nesdis.noaa.gov/" title="NOAA Satellite &amp; Information Service" class="topnav">NESDIS</a> &gt; <a href="/" title="go to the National Centers for Environmental Information (formerly the National Geophysical Data Center) home" class="topnav">NCEI (formerly NGDC)</a> &gt; <a href="//www.ngdc.noaa.gov/geomag/" title="Geomagnetism" class="topnav">Geomagnetism</a>
+</div>
+<div class="span-12 alignRight last">
+    Questions: <a href="mailto:geomag.models@noaa.gov">geomag.models@noaa.gov</a>
+</div>
+<div class="span-12 alignRight last">
+  <!-- Geomag-web Version 1.5.8 -->
+</div>
+
+<hr class="space" />
+<hr />
+
+<div class="span-24 alignCenter">
+<ul class="">
+    <li class="inline">
+      <a href="//www.ngdc.noaa.gov/"
+         title="go to home"
+         target="_blank" >Home</a> |
+    </li>
+    <li class="inline">
+      <a href="//www.ngdc.noaa.gov/ngdcinfo/phone.html" class="footltbg"
+         title="go to directory of contacts"
+         target="_blank" >Contacts</a> |
+    </li>
+    <li class="inline">
+      <a href="//www.ngdc.noaa.gov/ngdcinfo/onlineaccess.html" class="footltbg"
+         title="go to data available"
+         target="_blank" >Data</a> |
+    </li>
+    <li class="inline">
+      <a href="//www.ngdc.noaa.gov/ngdcinfo/privacy.html#disclaimer" class="footltbg"
+         title="go to privacy, disclaimer, and copyright notices"
+         target="_blank" >Disclaimers</a> |
+    </li>
+    <li class="inline">
+      <a href="//www.ngdc.noaa.gov/education/education.html" class="footltbg"
+         title="go to education and outreach resources and links"
+         target="_blank" >Education</a> |
+    </li>
+    <li class="inline">
+      <a href="//www.ngdc.noaa.gov/products/ngdc_news.html" class="footltbg"
+         title="go to news and features"
+         target="_blank" >News</a> |
+    </li>
+    <li class="inline">
+      <a href="//www.ngdc.noaa.gov/ngdcinfo/privacy.html" class="footltbg"
+         title="go to privacy, disclaimer, and copyright notices"
+         target="_blank" >Privacy Policy</a> |
+    </li>
+    <li class="inline">
+      <a href="//www.ngdc.noaa.gov/sitemap/sitemap.html" class="footltbg"
+         title="go to an index of the Web site"
+         target="_blank">Site Map</a> |
+    </li>
+    <li class="inline">
+      <a href="//www.ngdc.noaa.gov/feedback/" class="footltbg"
+        title="provide feedback on the Web site">Take Our Survey</a> |
+    </li>
+    <li class="inline">
+      <a href="//www.ngdc.noaa.gov/geomag/faqgeom.shtml" class="footltbg"
+         title="go to frequently asked questions"
+         target="_blank">FAQ</a> |
+    </li>
+    <li class="inline">
+      <a href="//www.swpc.noaa.gov/today.html"
+         title="go to todays space weather"
+         target="_blank">Today's Space Weather</a>
+    </li>
+  </ul>
+</div>
+
+      </div>
+    
+  </div>
+
+    
+      <script src="static/oasSIuUDsOVjKWzSbRsu1jgv8UTwjvBMHc88mTkBaZ9.js" type="text/javascript" ></script>
+<script src="static/5WGv1dVZaTtmfPe6cjFvURvjiHM1MUNpbg84cyPRktf.js" type="text/javascript" ></script>
+<script src="static/magnetic-frontend.js" type="text/javascript" ></script>
+
+      <link rel="stylesheet" href="https://js.arcgis.com/3.26/esri/css/esri.css" />
+   <script src="https://js.arcgis.com/3.26/"></script> 
+<script id="_fed_an_ua_tag" type="text/javascript" src="/scripts/federated-analytics.js?agency=DOC&subagency=NOAA&pua=UA-44375312-1"></script><script id="_fed_an_ua_tag" type="text/javascript" src="/scripts/federated-analytics.js?agency=DOC&subagency=NOAA&pua=UA-44375312-1"></script></body>
+
+<script type="text/javascript">
+
+    var tab = window.location.hash.split('?')[0] || '#declination';
+    tab += "Tab";
+    jQuery( tab ).addClass( "sel" );
+    jQuery("#geomagCalculators").buildMbTabset({
+    "sortable":false,
+    "position":"left"
+    });
+
+
+
+
+//Testing if on mobile and if to redirect
+var url = window.location.href;
+var noRed = new URL(url).searchParams.get("useFullSite");
+if(noRed == 'true')
+  noRed = true;
+else 
+  noRed = false;
+
+if( noRed == false && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+  url = url.substr(0, url.lastIndexOf('/'));
+  url = url + "/mobileDeclination.shtml";
+  window.location.href = url;
+}
+
+</script>
+</html>
+
+
+
