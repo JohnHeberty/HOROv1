@@ -20,7 +20,7 @@
 ---
 
 <p align="center"> 
-    Few lines describing your project.
+    Before running the project, it is necessary to extract the compressed browser located in Modulos\BROWSER\chrome-win.zip. Please extract the files within this folder, as this is a prerequisite for the algorithm to function properly. The extracted browser will be used to obtain the magnetic declination.
     <br> 
 </p>
 
