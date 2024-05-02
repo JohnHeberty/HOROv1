@@ -2,8 +2,21 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import glob
-import time
+import matplotlib.ticker as tkr
+from Rdita_Atrs_2024 import *               # DESENVOLVIDO POR JOHN HEBERTY DE FREITAS - FUNÇÕES AUXILIARES
+from glob import glob
+import numpy as np
+import os
+from requests import get
+import numpy as np
+from sklearn.cluster import KMeans
+import numpy as np
+import cv2 as cv
+import math
+
+from Modulos.BROWSER.Engine import *
+from Functions import *
+from Script1 import *
 
 # FUNÇÃO PARA CONVERTER COORDENADAS DECIMAL PARA GRAU MINUTOS
 def LatLon_to_GrauMinute(latitude, longitude):
@@ -199,11 +212,11 @@ def DrawReferenceRUNWAY(imagem, centro, comprimento, angulo, cor, espessura):
     cv.circle(imagem, ponto_final, espessura, cor, -1)
 
 # FUNÇÃO QUE AGRUPA AS AREAS DA ROSEWIND
-def Agrupar(contornos, clusters=5):
+def Agroup(contornos, clusters=5):
     # Calcule as áreas dos contornos
     areas = np.array([cv.contourArea(contorno) for contorno in contornos]).reshape(-1, 1)
     
-    # Aplique o algoritmo k-means para agrupar as áreas
+    # Aplique o algoritmo k-means para Agroup as áreas
     kmeans = KMeans(n_clusters=clusters)
     kmeans.fit(areas)
     
@@ -222,7 +235,7 @@ def Agrupar(contornos, clusters=5):
     return rotulos_clusters, contornos_agrupados, center_grups
 
 # CRIA CORES UNIDAS EM ESCALA DE CINZA
-def gerar_cores_unicas_cinza(n_cores):
+def GenerateUniqueGrayColors(n_cores):
     # Lista para armazenar as cores
     cores = []
     # Calcular o espaçamento entre cada cor em escala de cinza
@@ -245,7 +258,7 @@ def BaricentroArea(area):
     return x_baricentro, y_baricentro
 
 # CALCULA O AZIMUTE ENTRE 2 PONTOS            
-def CalcularAzimute(p1, p2):
+def CalculateAzimuth(p1, p2):
     x1, y1 = p1
     x2, y2 = p2
     delta_x = x2 - x1
@@ -269,7 +282,7 @@ def CalcularAzimute(p1, p2):
     return azimute
 
 # LIMPA TODOS OS ITENS DENTRO DA PASTA
-def limpar_pasta(caminho_pasta):
+def ClearFolder(caminho_pasta):
     # Verifique se o caminho da pasta é válido
     if not os.path.isdir(caminho_pasta):
         print(f"O caminho '{caminho_pasta}' não é uma pasta válida.")
@@ -288,14 +301,14 @@ def limpar_pasta(caminho_pasta):
 
 # PRECISA INCLUIR NORTE MAGNETICO
 # CRIA A ORIENTAÇÃO DE PISTA
-def OrientacaoPista(PISTA):
+def HeadboardRunway(PISTA):
     CONTRARIO = PISTA - 180 if (PISTA - 180) > 0 else PISTA + 180
     PISTA = int(round(PISTA / 10, 0))
     CONTRARIO = int(round(CONTRARIO / 10, 0))
     return f"{PISTA}-{CONTRARIO}"
 
 # CRIANDO VIDEO DO RESULTADO FINAL
-def CriarVideo(pasta_imagens, caminho_saida_video, largura=1280, altura=720, fps=10):
+def CreateVideo(pasta_imagens, caminho_saida_video, largura=1280, altura=720, fps=10):
     
     # Lista todas as imagens na pasta
     imagens = sorted(glob(os.path.join(f"{pasta_imagens}", "*jpg")), key=lambda x: int(x.split(".")[0].split("\\")[-1].replace("IMG","")))

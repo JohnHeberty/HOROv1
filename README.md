@@ -3,7 +3,7 @@
 
 <p align="center">
   <a href="" rel="noopener">
- <img width=500px src="OrientacaoPista.gif" alt="Project logo"></a>
+ <img width=500px src="RunwayOrientation.gif" alt="Project logo"></a>
 </p>
 
 <h3 align="center">HEURISTIC OPTIMIZATION IN RUNWAY ORIENTATION - ( HORO )</h3>
