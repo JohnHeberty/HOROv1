@@ -327,10 +327,12 @@ def ClearFolder(caminho_pasta):
 # PRECISA INCLUIR NORTE MAGNETICO
 # CRIA A ORIENTAÇÃO DE PISTA
 def HeadboardRunway(PISTA):
-    PISTA_ = "0"*(3 - len(str(PISTA))) + f"{PISTA}"
-    if int(PISTA_[-1]) == 5:
-        PISTA = PISTA + 5
-        PISTA_ = ("0"*(3 - len(str(PISTA))) + f"{PISTA}")[:-1]
+    PISTA = int(PISTA)
+    if int(str(PISTA)[-1]) >= 5:
+        PISTA = PISTA + (10 - int(str(PISTA)[-1]))
+    else:
+        PISTA = PISTA - int(str(PISTA)[-1])
+    PISTA_ = ("0"*(3 - len(str(PISTA))) + f"{PISTA}")[:-1]
     CONTRARIO = PISTA - 180 if (PISTA - 180) > 0 else PISTA + 180
     CONTRARIO = int(round(CONTRARIO / 10, 0))
     return f"{PISTA_}-{CONTRARIO}"
