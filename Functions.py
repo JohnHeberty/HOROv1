@@ -2,8 +2,8 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import matplotlib.ticker as tkr
 from Rdita_Atrs_2024 import *               # DESENVOLVIDO POR JOHN HEBERTY DE FREITAS - FUNÇÕES AUXILIARES
+from datetime import datetime
 from glob import glob
 import numpy as np
 import os
@@ -13,6 +13,7 @@ from sklearn.cluster import KMeans
 import numpy as np
 import cv2 as cv
 import math
+import time
 
 from Modulos.BROWSER.Engine import *
 from Functions import *
@@ -62,7 +63,8 @@ def GetMagneticDeclination(lat, lon, driver, timeout=60):
         # Clicar no botão
         element.clear()
         element.send_keys(Lat_GrauMinuto)
-        driver.find_elements_by_css_selector(f"[value='{Lat_Dir}']").click()
+        time.sleep(1)
+        driver.find_element_by_css_selector(f"[value='{Lat_Dir}']").click()
     except Exception as e:
         pass
 
@@ -74,7 +76,8 @@ def GetMagneticDeclination(lat, lon, driver, timeout=60):
         # Clicar no botão
         element.clear()
         element.send_keys(Lon_GrauMinuto)
-        driver.find_elements_by_css_selector(f"[value='{Lon_Dir}']").click()
+        time.sleep(1)
+        driver.find_element_by_css_selector(f"[value='{Lon_Dir}']").click()
     except Exception as e:
         pass
 
@@ -102,8 +105,9 @@ def GetMagneticDeclination(lat, lon, driver, timeout=60):
 
     # BUSCA A DECLINAÇÃO MAGNETICA 
     try:
+        data_find = datetime.now().strftime("%Y-%m-%d")
         element = WebDriverWait(driver, timeout).until(
-            EC.element_to_be_clickable((By.XPATH, "//*[contains(text(), '2024-05-02')]"))
+            EC.element_to_be_clickable((By.XPATH, f"//*[contains(text(), '{data_find}')]"))
         )
         parent_element = element.find_element(By.XPATH, "./..")
         children_elements = parent_element.find_elements(By.XPATH, ".//*")
@@ -111,16 +115,33 @@ def GetMagneticDeclination(lat, lon, driver, timeout=60):
         # Retornar o elemento
     except Exception as e:
         pass
-    
+       
     # RESETANDO PARA PROXIMA DECLINAÇÃO
     driver.delete_all_cookies()
     driver.refresh()
     
-    # Dividir a string em graus, minutos e segundos
-    graus, minutos, segundos = map(int, Declination.replace("°", "").replace("'", "").replace("''", "").split())
-
+    graus       = 0
+    minutos     = 0
+    segundos    = 0
+    try:    
+        # Dividir a string em graus, minutos e segundos
+        graus, minutos, segundos    = list(map(int, Declination.replace("°", "").replace("'", "").replace("''", "").split()))
+    except Exception as e:
+        try:    
+            # Dividir a string em graus, minutos e segundos
+            graus, minutos          = list(map(int, Declination.replace("°", "").replace("'", "").replace("''", "").split()))
+        except Exception as e:
+            try:    
+                # Dividir a string em graus, minutos e segundos
+                graus               = list(map(int, Declination.replace("°", "").replace("'", "").replace("''", "").split()))
+            except Exception as e:
+                pass
+    
     # Converter para graus
     angulo_graus = round(graus + minutos / 60 + segundos / 3600, 4)
+    
+    # ESPERA 5S SOMENTE PARA RENDERIZAR O MAPA
+    time.sleep(5)
     
     return angulo_graus
 
@@ -308,10 +329,10 @@ def HeadboardRunway(PISTA):
     return f"{PISTA}-{CONTRARIO}"
 
 # CRIANDO VIDEO DO RESULTADO FINAL
-def CreateVideo(pasta_imagens, caminho_saida_video, largura=1280, altura=720, fps=10):
+def CreateVideo(FolderImages, caminho_saida_video, largura=1280, altura=720, fps=10):
     
     # Lista todas as imagens na pasta
-    imagens = sorted(glob(os.path.join(f"{pasta_imagens}", "*jpg")), key=lambda x: int(x.split(".")[0].split("\\")[-1].replace("IMG","")))
+    imagens = sorted(glob(os.path.join(f"{FolderImages}", "*jpg")), key=lambda x: int(x.split(".")[0].split("\\")[-1].replace("IMG","")))
 
     # Define o codec de vídeo
     codec = cv.VideoWriter_fourcc(*'XVID')

@@ -55,13 +55,14 @@ def ReadDatasets(Paths, DecimalPlaces=3, MtoNo=1.944, reanalysis=False, SaveAnal
                 # list([row for row in df.columns if "TEMPERATURA ORVALHO MIN" in row]) + \
                 # list([row for row in df.columns if "PRESSAO ATMOSFERICA MAX" in row]) + \
                 # list([row for row in df.columns if "PRESSAO ATMOSFERICA MIN" in row]) + \
-                columns = ["DATA"] + list([row for row in df.columns if "UMIDADE RELATIVA" in row])
-                #columns = columns  + list([row for row in df.columns if "TEMPERATURA DO PONTO DE ORVALHO" in row])
+                # columns = ["DATA"] + list([row for row in df.columns if "UMIDADE RELATIVA" in row])
+                # columns = columns  + list([row for row in df.columns if "TEMPERATURA DO PONTO DE ORVALHO" in row])
                 # columns = columns  + list([row for row in df.columns if "TEMPERATURA MINIMA" in row])
                 # columns = columns  + list([row for row in df.columns if "TEMPERATURA MAXIMA" in row])
-                columns = columns  + list([row for row in df.columns if "BULBO SECO" in row])
+                # columns = columns  + list([row for row in df.columns if "BULBO SECO" in row])
                 # columns = columns  + list([row for row in df.columns if "PRESSAO" in row and "ESTACAO" in row])
                 # columns = columns  + list([row for row in df.columns if "PRESSAO" in row and "MAR" in row])
+                columns = ["DATA"]
                 DIRECAO = list([row for row in df.columns if "DIRECAO" in row])
                 columns = columns  + DIRECAO
                 VENTO_MAX_AUTO = list([row for row in df.columns if ("VENTO" in row and "RAJADA" in row)])
@@ -76,13 +77,13 @@ def ReadDatasets(Paths, DecimalPlaces=3, MtoNo=1.944, reanalysis=False, SaveAnal
                 df = df.reset_index(drop=True)
                 df.columns = [
                     "DATA",
-                    f"UMIDADE RELATIVA",
+                    # f"UMIDADE RELATIVA",
                     #f"TEMPERATURA DO PONTO DE ORVALHO",
                     # f"TEMPERATURA MINIMA",
                     # f"TEMPERATURA MAXIMA",
                     # f"TEMPERATURA ORVALHO MAX",
                     # f"TEMPERATURA ORVALHO MIN",
-                    f"BULBO SECO",
+                    # f"BULBO SECO",
                     # f"PRESSAO ATMOSFERICA MAX",
                     # f"PRESSAO ATMOSFERICA MIN",
                     #f"PRESSAO AO NIVEL DA ESTACAO",
@@ -104,7 +105,7 @@ def ReadDatasets(Paths, DecimalPlaces=3, MtoNo=1.944, reanalysis=False, SaveAnal
                 df = df[df[df.columns[-1]]>0]
                 # TRANSFORMANDO M/S PARA NÓS/S
                 df[df.columns[-1]] = df[df.columns[-1]].apply(lambda x:  round(x * MtoNo, DecimalPlaces))
-                df = df.reset_index(drop=True)
+                df = df.sort_values(["DATA"]).reset_index(drop=True)
                 DataFiles[Name] = {
                     "Local": (eval(Latitude), eval(Longitude)), 
                     "Altidude": Altitude, 

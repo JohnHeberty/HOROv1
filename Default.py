@@ -16,15 +16,15 @@ SectorNames             = {                         # Nome dos Possiveis Nomes p
 }
 
 # VARIAVEIS PARA OTIMIZAÇÃO DE PISTA
-Width_IMG               = 1920                      # LARGURA DA IMAGEM QUE SERA CRIADA A SIMULAÇÃO
-Height_IMG              = 1080                      # ALTURA DA IMAGEM QUE SERA CRIADA A SIMULAÇÃO
+Width_IMG               = 3840                      # LARGURA DA IMAGEM QUE SERA CRIADA A SIMULAÇÃO
+Height_IMG              = 2160                      # ALTURA DA IMAGEM QUE SERA CRIADA A SIMULAÇÃO
 FonteThickness          = 2                         # ESPESSURA DA FONTE DENTRO DA IMAGEM
 FonteSize               = 2                         # TAMANHO DA FONTE DENTRO DA IMAGEM
 Fonte                   = cv.FONT_HERSHEY_SIMPLEX   # FONTE A SER USADA NA SIMULAÇÃO
 MakeVideo               = True                      # SE ATIVADO IRÁ PRODUZIR UM VIDEO NO FINAL
 
 # PATHS - NÃO MODIFIQUE CAUSARÁ ERROS
-pasta_imagens           = os.path.join(os.getcwd(), "Movies", "IMGS")
+FolderImages           = os.path.join(os.getcwd(), "Movies", "IMGS")
 caminho_saida_video     = os.path.join(os.getcwd(), "Movies", "RunwayOrientation-{}.mp4")
 WeatherStationsPath     = glob(os.path.join("INPUT", "*.csv"))          # ARQUIVOS PARA ANALISE
 WeatherStationsPath_OK  = os.path.join("Modulos", "DADOS", "TREATED")   # ARQUIVOS JÁ TRATADOS
