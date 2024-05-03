@@ -1,4 +1,4 @@
-<h1 align="center">HEURISTIC OPTIMIZATION IN RUNWAY ORIENTATION - ( HORO )</h1>
+<h2 align="center">HEURISTIC OPTIMIZATION IN RUNWAY ORIENTATION - ( HORO )</h2>
 
 <p align="center">
   <a href="" rel="noopener">
