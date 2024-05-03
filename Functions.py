@@ -37,7 +37,7 @@ def LatLon_to_GrauMinute(latitude, longitude):
     return LatEnd, lat_dir, LonEnd, lon_dir
 
 # PRECISA DO NAVEGADOR PARA OBTER A DECLINAÇÃO
-def GetMagneticDeclination(lat, lon, driver, timeout=10):
+def GetMagneticDeclination(lat, lon, driver, timeout=60):
     Declination = ''
     
     # EFETUANDO O CALCULO DA DECLINAÇÃO MAGNETICA

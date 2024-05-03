@@ -1,12 +1,9 @@
-# HORO
-
-
 <p align="center">
   <a href="" rel="noopener">
- <img width=500px src="RunwayOrientation.gif" alt="Project logo"></a>
+ <img width=450px src="RunwayOrientation.gif" alt="Project logo"></a>
 </p>
 
-<h3 align="center">HEURISTIC OPTIMIZATION IN RUNWAY ORIENTATION - ( HORO )</h3>
+<h2 align="center">HEURISTIC OPTIMIZATION IN RUNWAY ORIENTATION - ( HORO )</h2>
 
 <div align="center">
 
