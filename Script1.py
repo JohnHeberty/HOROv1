@@ -70,9 +70,9 @@ def Script1(DIRECAO, MAGNETUDE, NOMESETORES, LIMITES):
     ###################### V2 ######################
     ################################################
     
-    Receba os dados de direção do vento, sua magnitude, nomes dos setores e os limites de magnitude para cada setor.
+    Receba os dados de direção do vento, sua magnitude, nomes dos setores e os LIMITES de magnitude para cada setor.
     Divida o círculo de direção do vento em setores de igual tamanho.
-    Para cada setor, conte a quantidade de ventos que se encaixam nos limites de magnitude especificados.
+    Para cada setor, conte a quantidade de ventos que se encaixam nos LIMITES de magnitude especificados.
     Calcule a porcentagem de ventos para cada setor em relação ao total.
     Retorne a tabela de porcentagens de ventos por setor.
     

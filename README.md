@@ -19,6 +19,12 @@
 <p align="center"> 
     Before running the project, it is necessary to extract the compressed browser located in Modulos\BROWSER\chrome-win.zip. Please extract the files within this folder, as this is a prerequisite for the algorithm to function properly. The extracted browser will be used to obtain the magnetic declination.
     <br> 
+    <h4>1° Primeiro Passo</h4>
+    Inserir seus dados metereologicos dentro da pasta INPUT na raiz do projeto, lembrando que tais informações precisam ter pelo menos 10 anos de historico.
+    <h4>2° Segundo Passo</h4>
+    Configure o arquivo Default.py com suas variaveis padrões, principalmente se seu aeroporto não for um internacional, assim será preciso alterar os limites.
+    <h4>3° Terceiro Passo</h4>
+    .....
 </p>
 
 ## 📝 Table of Contents

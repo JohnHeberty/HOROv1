@@ -1,18 +1,18 @@
 import pandas as pd
 
 # CRIANDO A TABELA DE VENTOS
-def WindTablePCT(tabelao, n, Direcao_nome="DIRECAO", Vento_nome="VENTO", limites=[3,   13, 20, 40], save=False, verbose=0):
+def WindTablePCT(tabelao, n, Direcao_nome="DIRECAO", Vento_nome="VENTO", LIMITES=[3,   13, 20, 40], save=False, verbose=0):
 
     direcao             = tabelao[[column for column in tabelao.columns if Direcao_nome in column][0]]  # Graus de direção do vento 
     magnetude           = tabelao[[column for column in tabelao.columns if Vento_nome in column][0]]  # Magnitude do vento
 
-    nomes_setores       = {
+    SectorNames       = {
         4: ['N', 'W', 'S', 'E'],
         8: ['N', 'NW', 'W', 'SW', 'S', 'SE', 'E', 'NE'],
         16: ['N', 'NNW', 'NW', 'WNW', 'W', 'WSW', 'SW', 'SSW', 'S', 'SSE', 'SE', 'ESE', 'E', 'ENE', 'NE', 'NNE']
     }
 
-    name_setores        = nomes_setores[n] if n in nomes_setores else []
+    name_setores        = SectorNames[n] if n in SectorNames else []
     # SE NOME DOS SETORES FICAR VAZIO CRIE NOME NUMERICOS
     if len(name_setores) == 0: 
         name_setores = [f"D{i}" for i in range(1,n+1)]
@@ -24,14 +24,14 @@ def WindTablePCT(tabelao, n, Direcao_nome="DIRECAO", Vento_nome="VENTO", limites
     DF_WIND = tabelao[[direcao.name, magnetude.name]].copy()
     DF_WIND = DF_WIND.astype("float64")
     columns = {}
-    for i in range(len(limites)):
+    for i in range(len(LIMITES)):
         if i == 0:
-            columns[i] = DF_WIND[DF_WIND[DF_WIND.columns[1]]<=limites[i]]
-        elif i == len(limites)-1:
-            columns[i] = DF_WIND[(DF_WIND[DF_WIND.columns[1]]>limites[i-1]) & (DF_WIND[DF_WIND.columns[1]]<=limites[i])]
-            columns[i+1] = DF_WIND[DF_WIND[DF_WIND.columns[1]]>limites[i]]
+            columns[i] = DF_WIND[DF_WIND[DF_WIND.columns[1]]<=LIMITES[i]]
+        elif i == len(LIMITES)-1:
+            columns[i] = DF_WIND[(DF_WIND[DF_WIND.columns[1]]>LIMITES[i-1]) & (DF_WIND[DF_WIND.columns[1]]<=LIMITES[i])]
+            columns[i+1] = DF_WIND[DF_WIND[DF_WIND.columns[1]]>LIMITES[i]]
         else:
-            columns[i] = DF_WIND[(DF_WIND[DF_WIND.columns[1]]>limites[i-1]) & (DF_WIND[DF_WIND.columns[1]]<=limites[i])]
+            columns[i] = DF_WIND[(DF_WIND[DF_WIND.columns[1]]>LIMITES[i-1]) & (DF_WIND[DF_WIND.columns[1]]<=LIMITES[i])]
 
     # EFETUANDO A CLASSIFICAÇÃO DOS DADOS
     dict_result = {}
@@ -51,7 +51,7 @@ def WindTablePCT(tabelao, n, Direcao_nome="DIRECAO", Vento_nome="VENTO", limites
         dict_result[setor] = [calc_columns[row] for row in calc_columns]
 
     # OBTENDO OS TITULOS DOS DADOS
-    titles = GetTitle(limites)
+    titles = GetTitle(LIMITES)
 
     # UNINDO TUDO EM UM DATAFRAME
     df_pct_ventos = pd.DataFrame(dict_result, index=titles).T
@@ -75,20 +75,20 @@ def calcular_setores(n, name_setores):
     return setores
 
 # CRIA O TITULO DO DATAFRAME FINAL CONFORME VARIAÇÃO DOS LIMITES
-def GetTitle(limites):
+def GetTitle(LIMITES):
     # CRIANDO O TITULO PERSONALIZAVEL
     columns_end = []
-    for i in range(len(limites)):
+    for i in range(len(LIMITES)):
         if i == 0:
-            titulo = f"[0-{limites[i]}]"
+            titulo = f"[0-{LIMITES[i]}]"
             columns_end.append(titulo)
-        elif i == len(limites)-1:
-            titulo = f"[{limites[i-1]}-{limites[i]}]"
+        elif i == len(LIMITES)-1:
+            titulo = f"[{LIMITES[i-1]}-{LIMITES[i]}]"
             columns_end.append(titulo)
-            titulo = f"[{limites[i]}-*]"
+            titulo = f"[{LIMITES[i]}-*]"
             columns_end.append(titulo)
         else:
-            titulo = f"[{limites[i-1]}-{limites[i]}]"
+            titulo = f"[{LIMITES[i-1]}-{LIMITES[i]}]"
             columns_end.append(titulo)
     return columns_end
 
@@ -116,49 +116,3 @@ def PistasPossiveis(directions):
         if opposite_direction:
             opposite_directions.add(tuple(sorted([direction, opposite_direction])))
     return opposite_directions
-
-##### METODO DESCONTINUADO
-
-#     limite_dentro_ppd   = [3,   13, 20  ]
-#     limite_fora_ppd     = [20,  25, 40  ]
-
-# # OBTENDO OS ANGULOS DA ROSA DOS VENTOS
-# dicionario_angulos = angulos_rosa(RosadosVentos, name_setores)
-# directions_SUM = PistasPossiveis(dicionario_angulos)
-
-# # OBTENDO AS COLUNAS QUE SE SOMAM PARA CALCULAR A DIREÇAO DA PISTA
-# Columns_Dentro_PPD = GetTitle(limite_dentro_ppd)[:-1]
-# Columns_Fora_PPD = GetTitle(limite_fora_ppd)[1:]
-
-# # SOMANDO OS VENTOS DENTRO E FORA DA PISTA
-# dict_ok_end = {}
-# dict_not_ok_end = {}
-# for direction in directions_SUM:
-#     d1, d2 = direction
-#     dict_ok_end[f"{d1}-{d2}"] = (df_pct_ventos[Columns_Dentro_PPD].loc[d1] + df_pct_ventos[Columns_Dentro_PPD].loc[d2]).sum()
-#     dict_not_ok_end[f"{d1}-{d2}"] = (df_pct_ventos[Columns_Fora_PPD].loc[d1] + df_pct_ventos[Columns_Fora_PPD].loc[d2]).sum()
-
-# # JUNTANDO TUDO EM UMA DATAFRAME
-# data_dentro_fora = pd.DataFrame([dict_ok_end, dict_not_ok_end], index=["Dentro","Frota"]).reset_index(drop=False, names=["LOCAL"])
-# data_dentro_fora
-
-
-
-##### METODO DESCONTINUADO
-# CRIANDO OS PERIODOS DE ANALISE - DESCONTINUADO
-
-# Periodos        = {}
-# Dias_Analise    = (365 * Tempo_Analise)
-# data_start      = tabelao.DATA.min()
-# data_max        = tabelao.DATA.max()
-# n_periodo       = 1
-# while True:
-#     info = {}
-#     info["START"]       = data_start
-#     info["END"]         = data_start + timedelta(days=Dias_Analise)
-#     data_start          = data_start + timedelta(days=(30 * Tempo_Busca))
-#     Periodos[n_periodo] = info
-#     n_periodo           +=1
-#     if info["END"] >= data_max: break
-# Periodos = pd.DataFrame(Periodos).T
-# Periodos.head()
