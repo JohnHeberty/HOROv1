@@ -90,7 +90,7 @@ def GetMagneticDeclination(lat, lon, driver, timeout=60):
         element.click()
     except Exception as e:
         pass
-
+    
     # SOLICITANDO O CALCULO
     try:
         element = WebDriverWait(driver, timeout).until(
@@ -111,7 +111,7 @@ def GetMagneticDeclination(lat, lon, driver, timeout=60):
         )
         parent_element = element.find_element(By.XPATH, "./..")
         children_elements = parent_element.find_elements(By.XPATH, ".//*")
-        Declination = children_elements[1].text.split("' ")[0]
+        Declination = children_elements[1].text.split("changing")[0].strip().upper()
         # Retornar o elemento
     except Exception as e:
         pass
@@ -119,6 +119,9 @@ def GetMagneticDeclination(lat, lon, driver, timeout=60):
     # RESETANDO PARA PROXIMA DECLINAÇÃO
     driver.delete_all_cookies()
     driver.refresh()
+    
+    Direction = Declination[-1:].strip()
+    Declination = Declination[:-1].strip()
     
     graus       = 0
     minutos     = 0
@@ -137,8 +140,9 @@ def GetMagneticDeclination(lat, lon, driver, timeout=60):
             except Exception as e:
                 pass
     
-    # Converter para graus
+    # Converter para graus e atribundo sinal engativo se for W
     angulo_graus = round(graus + minutos / 60 + segundos / 3600, 4)
+    angulo_graus = -angulo_graus if Direction == "W" else angulo_graus
     
     # ESPERA 5S SOMENTE PARA RENDERIZAR O MAPA
     time.sleep(5)
@@ -323,10 +327,13 @@ def ClearFolder(caminho_pasta):
 # PRECISA INCLUIR NORTE MAGNETICO
 # CRIA A ORIENTAÇÃO DE PISTA
 def HeadboardRunway(PISTA):
+    PISTA_ = "0"*(3 - len(str(PISTA))) + f"{PISTA}"
+    if int(PISTA_[-1]) == 5:
+        PISTA = PISTA + 5
+        PISTA_ = ("0"*(3 - len(str(PISTA))) + f"{PISTA}")[:-1]
     CONTRARIO = PISTA - 180 if (PISTA - 180) > 0 else PISTA + 180
-    PISTA = int(round(PISTA / 10, 0))
     CONTRARIO = int(round(CONTRARIO / 10, 0))
-    return f"{PISTA}-{CONTRARIO}"
+    return f"{PISTA_}-{CONTRARIO}"
 
 # CRIANDO VIDEO DO RESULTADO FINAL
 def CreateVideo(FolderImages, caminho_saida_video, largura=1920, altura=1080, fps=10):
