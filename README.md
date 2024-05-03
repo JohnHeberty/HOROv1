@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="" rel="noopener">
- <img width=450px src="RunwayOrientation.gif" alt="Project logo"></a>
+ <img width=500px src="RunwayOrientation.gif" alt="Project logo"></a>
 </p>
 
 <div align="center">
