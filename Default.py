@@ -29,13 +29,13 @@ StartLegendRight        = Width_IMG - 510           # ONDE COMEÇA A ESCREVER A 
 StartLegendLeft         = 40                        # ONDE COMEÇA A ESCREVER A LEGENDA NA PARTE ESQUERDA
 HeightEspaceLegend      = 40                        # ESPAÇO ENTRE AS LEGENDAS
 Fonte                   = cv.FONT_HERSHEY_SIMPLEX   # FONTE A SER USADA NA SIMULAÇÃO
-MakeVideo               = True                      # SE ATIVADO IRÁ PRODUZIR UM VIDEO NO FINAL
+MakeVideo               = False                     # SE ATIVADO IRÁ PRODUZIR UM VIDEO NO FINAL
+SaveFinalEsult          = True                      # SE ATIVADO IRÁ SALVAR RESULTADOS EM JSON
 ColorRunWay             = (255, 255, 255)           # COR DA PISTA A SER DESENHADA NA ROSA DOS VENTOS
 ColorLegend_BottomLeft  = (255, 255, 255)           # COR DA LEGENDA INFERIRO ESQUERDA 
 ColorBestRunWay         = (0, 255, 0)               # COR DA MELHOR PISTA A SER DESENHADA NA ROSA DOS VENTOS
 ColorPointRef           = (255, 165, 0)             # COR DO PONTO DE REFERENCIA DA PISTA
 PointSizeRef            = 25                        # TAMANHO DO PONTO DE REFERENCIA DA PISTA
-
 
 # PATHS - NÃO MODIFIQUE CAUSARÁ ERROS
 FolderImages            = os.path.join(os.getcwd(), "Movies", "IMGS")
