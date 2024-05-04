@@ -1,18 +1,15 @@
 
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from sklearn.cluster import KMeans
 from datetime import datetime
 from glob import glob
-import numpy as np
-import os
-from requests import get
-import numpy as np
-from sklearn.cluster import KMeans
 import numpy as np
 import cv2 as cv
 import math
 import time
+import os
 
 from Modulos.BROWSER.Engine import *
 from Functions import *
