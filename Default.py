@@ -19,19 +19,26 @@ SectorNames             = {                         # Nome dos Possiveis Nomes p
 }
 
 # VARIAVEIS PARA OTIMIZAÇÃO DE PISTA
-Width_IMG               = 1920#3840                 # LARGURA DA IMAGEM QUE SERA CRIADA A SIMULAÇÃO
-Height_IMG              = 1080#2160                 # ALTURA DA IMAGEM QUE SERA CRIADA A SIMULAÇÃO
+Width_IMG               = 1920#3840                 # LARGURA DA IMAGEM QUE SERA CRIADA A SIMULAÇÃO (Afeta o desempenho)
+Height_IMG              = 1080#2160                 # ALTURA DA IMAGEM QUE SERA CRIADA A SIMULAÇÃO (Afeta o desempenho)
+ProportionWindRoseImg   = 0.20                      # E COM BASE NO RAIO LOGO OCUPA 2X DA IMAGEM
 FonteThickness          = 1                         # ESPESSURA DA FONTE DENTRO DA IMAGEM
 FonteSize               = 0.90                      # TAMANHO DA FONTE DENTRO DA IMAGEM
+MaxSpinRoseWind         = 180
 StartLegendRight        = Width_IMG - 510           # ONDE COMEÇA A ESCREVER A LEGENDA NA PARTE DIRETA
 StartLegendLeft         = 40                        # ONDE COMEÇA A ESCREVER A LEGENDA NA PARTE ESQUERDA
 HeightEspaceLegend      = 40                        # ESPAÇO ENTRE AS LEGENDAS
 Fonte                   = cv.FONT_HERSHEY_SIMPLEX   # FONTE A SER USADA NA SIMULAÇÃO
 MakeVideo               = True                      # SE ATIVADO IRÁ PRODUZIR UM VIDEO NO FINAL
+ColorRunWay             = (255, 255, 255)           # COR DA PISTA A SER DESENHADA NA ROSA DOS VENTOS
+ColorLegend_BottomLeft  = (255, 255, 255)           # COR DA LEGENDA INFERIRO ESQUERDA 
+ColorBestRunWay         = (0, 255, 0)               # COR DA MELHOR PISTA A SER DESENHADA NA ROSA DOS VENTOS
+ColorPointRef           = (255, 165, 0)             # COR DO PONTO DE REFERENCIA DA PISTA
+PointSizeRef            = 25                        # TAMANHO DO PONTO DE REFERENCIA DA PISTA
 
 
 # PATHS - NÃO MODIFIQUE CAUSARÁ ERROS
-FolderImages           = os.path.join(os.getcwd(), "Movies", "IMGS")
+FolderImages            = os.path.join(os.getcwd(), "Movies", "IMGS")
 caminho_saida_video     = os.path.join(os.getcwd(), "Movies", "{}", "RunwayOrientation-{}.mp4")
 WeatherStationsPath     = glob(os.path.join("INPUT", "*.csv"))          # ARQUIVOS PARA ANALISE
 WeatherStationsPath_OK  = os.path.join("Modulos", "DADOS", "TREATED")   # ARQUIVOS JÁ TRATADOS
