@@ -2,7 +2,6 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from Rdita_Atrs_2024 import *               # DESENVOLVIDO POR JOHN HEBERTY DE FREITAS - FUNÇÕES AUXILIARES
 from datetime import datetime
 from glob import glob
 import numpy as np
@@ -18,6 +17,9 @@ import time
 from Modulos.BROWSER.Engine import *
 from Functions import *
 from Script1 import *
+
+# DESENVOLVIDO POR JOHN HEBERTY DE FREITAS
+# E-mail: john.7heberty@gmail.com
 
 # FUNÇÃO PARA CONVERTER COORDENADAS DECIMAL PARA GRAU MINUTOS
 def LatLon_to_GrauMinute(latitude, longitude):
@@ -358,3 +360,40 @@ def CreateVideo(FolderImages, caminho_saida_video, largura=1920, altura=1080, fp
     # Libera os recursos e fecha o vídeo
     video_writer.release()
     cv.destroyAllWindows()
+
+# CRIANDO OS SETOES
+def calcular_setores(n, name_setores):
+    meio_setor = (360 / n) / 2
+    inicio = 360
+    fim = 0
+    setores = {}
+    for i in range(1,n+1):
+        inicio = inicio - meio_setor * (1 if i == 1 else 2)
+        fim = (fim if i == 1 else inicio) + meio_setor * (1 if i == 1 else 2)
+        setores[name_setores[i-1]] = (inicio, fim)
+    return setores
+
+# CALCULANDO ANGULOS DA ROSA DOS VENTOS
+def angulos_rosa(n, name_setores):
+    passo = (360 / n)
+    inicio = 360
+    setores = {}
+    for i in range(1,n+1):
+        if i != 1:
+            inicio = inicio - passo
+        setores[name_setores[i-1]] = inicio if i == 1 else (inicio)
+    return setores
+
+# FUNÇÃO QUE ENCONTRA AS POSSIVEIS PISTAS A 180 GRAUS
+def PistasPossiveis(directions):
+    opposite_directions = set()
+    for direction, angle in directions.items():
+        opposite_angle = (angle + 180) % 360
+        opposite_direction = None
+        for dir, ang in directions.items():
+            if ang == opposite_angle:
+                opposite_direction = dir
+                break
+        if opposite_direction:
+            opposite_directions.add(tuple(sorted([direction, opposite_direction])))
+    return opposite_directions

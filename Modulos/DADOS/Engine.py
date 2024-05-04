@@ -45,7 +45,7 @@ def ReadDatasets(Paths, DecimalPlaces=3, MtoNo=1.944, reanalysis=False, SaveAnal
                         data = data.replace(" "," 0")
                     datas.append(data)
                 df["DATA"] = datas
-                formats = ["%Y-%m-%d %H%M", "%d/%m/%Y %H:%M"]
+                formats = ["%Y-%m-%d %H%M", "%d-%m-%Y %H%M", "%d/%m/%Y %H%M", "%d/%m/%Y %H:%M"]
                 for format in formats:
                     try:
                         df["DATA"] = pd.to_datetime(df["DATA"], format=format)
@@ -109,7 +109,7 @@ def ReadDatasets(Paths, DecimalPlaces=3, MtoNo=1.944, reanalysis=False, SaveAnal
                 DataFiles[Name] = {
                     "Local": (eval(Latitude), eval(Longitude)), 
                     "Altidude": Altitude, 
-                    "Data": df,
+                    "Dataset": df,
                     "Name File": os.path.basename(filePath),
                     "Path File": filePath
                 }
