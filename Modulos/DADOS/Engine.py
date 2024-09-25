@@ -7,7 +7,6 @@ import os
 def ReadDatasets(Paths, DecimalPlaces=3, MtoNo=1.944, reanalysis=False, SaveAnalysis=""):
     """
     MtoNo = RAZÃO DE METROS/S PARA NÓS/S
-    
     """
     
     pd.set_option('future.no_silent_downcasting', True)
@@ -118,7 +117,7 @@ def ReadDatasets(Paths, DecimalPlaces=3, MtoNo=1.944, reanalysis=False, SaveAnal
         if DataFiles != {} and SaveAnalysis != "":
             with open(path_pickle, 'wb') as arquivo:
                 pickle.dump(DataFiles, arquivo)
-    
+
     # SE EXISTIR PEGUE DO HISTORICO
     else:
         

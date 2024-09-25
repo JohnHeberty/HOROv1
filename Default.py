@@ -9,7 +9,7 @@ Url_MagneticDeclination = "https://ngdc.noaa.gov/geomag/calculators/magcalc.shtm
 DirectionName           = "DIRECAO"                 # NOME COMUM ENTRE OS BANCOS PARA O RUMO DO VENTO
 WindName                = "VENTO"                   # NOME COMUM ENTRE OS BANCOS PARA O VENTO
 DecimalPlaces           = 3                         # ARREDONDADMENTO EM 3 CASAS DESCIMAIS
-RoseWind                = 16                        # QUANTIDADE DE BARRAS QUE RODA DOS VENTOS TERA
+RoseWind                = 4                        # QUANTIDADE DE BARRAS QUE RODA DOS VENTOS TERA
 LIMITES                 = [3,   13, 20, 25, 40]     # Limites para a Rosas dos Ventos Segundo RBAC154 P/ RUNWAY >= 1500m
 WindRunwayLimite        = 20                        # VENTOS MENORES QUE ESTE VALOR SERÁ VENTOS DENTRO DA PISTA, CASO SEJA MAIOR E VENTO DE TRAVEZ - COM BASE NA RBAC154
 SectorNames             = {                         # Nome dos Possiveis Nomes para setores padrões
