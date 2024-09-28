@@ -54,11 +54,11 @@ class CBrowser():
         chrome_options.binary_location = path_browser_exe
 
         try:
+            self.driver = webdriver.Chrome(executable_path=path_driver, options=chrome_options)
+        except Exception as e:
             service = Service(executable_path=path_driver)
             self.driver = webdriver.Chrome(service=service, options=chrome_options)
-        except Exception as e:
-            self.driver = webdriver.Chrome(executable_path=path_driver, options=chrome_options)
-
+            
         self.driver.set_page_load_timeout(self.timeout_load * 5)
         self.driver.get(self.BaseUrl)
         
