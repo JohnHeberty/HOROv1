@@ -44,6 +44,10 @@ class CBrowser():
 
         # Configurando opções do Chrome
         chrome_options = webdriver.ChromeOptions()  # Options()  webdriver.ChromeOptions()
+        chrome_options.add_argument("--verbose")
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument("--window-size=1920, 1080")
         chrome_options.add_argument("--headless") # Executa o Chrome em modo headless (sem interface gráfica)
         chrome_options.add_argument("--no-sandbox") # Desabilita o sandbox para evitar problemas de permissões
         chrome_options.add_argument("--disable-dev-shm-usage") # Desabilita o uso de /dev/shm para evitar problemas de memória compartilhada
