@@ -1,3 +1,5 @@
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.os_manager import ChromeType
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium import webdriver
@@ -22,8 +24,6 @@ class CBrowser():
             self.path_browserdriver = os.path.join("Modulos", "BROWSER", "chrome-win")
             self.CleanChrome()
             self.ExtractZip()
-        elif self.system == "Linux":
-            self.path_browserdriver = os.path.join("/","usr", "lib", "chromium-browser", "chromedriver")
         
     def CleanChrome(self) -> bool:
         if os.path.exists(self.path_browserdriver):
@@ -66,9 +66,12 @@ class CBrowser():
                 service = Service(executable_path=path_driver)
                 self.driver = webdriver.Chrome(service=service, options=chrome_options)
         elif self.system == "Linux":
-            self.driver = webdriver.Chrome(executable_path=self.path_browserdriver, options=chrome_options)
+            driver_path = ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
+            service = Service(executable_path=driver_path)
+            self.driver = webdriver.Chrome(service=service, options=chrome_options)
         
         self.driver.set_page_load_timeout(self.timeout_load * 5)
+        self.driver.implicitly_wait(self.timeout_load)
         self.driver.get(self.BaseUrl)
         
         return self.driver

@@ -37,7 +37,22 @@ def LatLon_to_GrauMinute(latitude, longitude):
     return LatEnd, lat_dir, LonEnd, lon_dir
 
 # PRECISA DO NAVEGADOR PARA OBTER A DECLINAÇÃO
-def GetMagneticDeclination(lat, lon, driver, timeout=60):
+def GetMagneticDeclinatioOLD(lat, lon, driver, timeout=60):
+    """
+    # OBTEN A DECLINAÇÃO MAGNETIVA
+    
+    Está função foi depreciada e so roda na versão do seleium 3.141
+
+    Args:
+        lat (_type_): _description_
+        lon (_type_): _description_
+        driver (_type_): _description_
+        timeout (int, optional): _description_. Defaults to 60.
+
+    Returns:
+        _type_: _description_
+    """
+    
     Declination = ''
     
     # EFETUANDO O CALCULO DA DECLINAÇÃO MAGNETICA
@@ -144,6 +159,104 @@ def GetMagneticDeclination(lat, lon, driver, timeout=60):
     angulo_graus = -angulo_graus if Direction == "W" else angulo_graus
     
     # ESPERA 5S SOMENTE PARA RENDERIZAR O MAPA
+    time.sleep(5)
+    
+    return angulo_graus
+
+# Função para obter a declinação magnética
+def GetMagneticDeclination(lat, lon, driver, timeout=60):
+    Declination = ''
+    
+    # Converte latitude e longitude para grau e minuto
+    Lat_GrauMinuto, Lat_Dir, Lon_GrauMinuto, Lon_Dir = LatLon_to_GrauMinute(lat, lon)
+    
+    # Aguardar até que o botão seja clicável
+    try:
+        element = WebDriverWait(driver, timeout).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "#declinationIGRF"))
+        )
+        element.click()
+    except Exception as e:
+        pass
+
+    # Inserindo latitude
+    try:
+        element = WebDriverWait(driver, timeout).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "#declinationLat1"))
+        )
+        element.clear()
+        element.send_keys(Lat_GrauMinuto)
+        time.sleep(1)
+        driver.find_element(By.CSS_SELECTOR, f"[value='{Lat_Dir}']").click()
+    except Exception as e:
+        pass
+
+    # Inserindo longitude
+    try:
+        element = WebDriverWait(driver, timeout).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "#declinationLon1"))
+        )
+        element.clear()
+        element.send_keys(Lon_GrauMinuto)
+        time.sleep(1)
+        driver.find_element(By.CSS_SELECTOR, f"[value='{Lon_Dir}']").click()
+    except Exception as e:
+        pass
+
+    # Escolhendo a informação em HTML
+    try:
+        element = WebDriverWait(driver, timeout).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "#declinationHTML"))
+        )
+        element.click()
+    except Exception as e:
+        pass
+    
+    # Solicitando o cálculo
+    try:
+        element = WebDriverWait(driver, timeout).until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "#calcbutton"))
+        )
+        element.click()
+    except Exception as e:
+        pass
+
+    time.sleep(2)
+
+    # Buscando a declinação magnética
+    try:
+        data_find = datetime.now().strftime("%Y-%m-%d")
+        element = WebDriverWait(driver, timeout).until(
+            EC.element_to_be_clickable((By.XPATH, f"//*[contains(text(), '{data_find}')]"))
+        )
+        parent_element = element.find_element(By.XPATH, "./..")
+        children_elements = parent_element.find_elements(By.XPATH, ".//*")
+        Declination = children_elements[1].text.split("changing")[0].strip().upper()
+    except Exception as e:
+        pass
+    
+    driver.delete_all_cookies()
+    driver.refresh()
+    
+    Direction = Declination[-1:].strip()
+    Declination = Declination[:-1].strip()
+    
+    graus = minutos = segundos = 0
+    try:
+        graus, minutos, segundos = list(map(int, Declination.replace("°", "").replace("'", "").replace("''", "").split()))
+    except Exception:
+        try:
+            graus, minutos = list(map(int, Declination.replace("°", "").replace("'", "").replace("''", "").split()))
+        except Exception:
+            try:
+                graus = int(Declination.replace("°", "").replace("'", "").replace("''", ""))
+            except Exception as e:
+                pass
+    
+    # Converte para graus
+    angulo_graus = round(graus + minutos / 60 + segundos / 3600, 4)
+    angulo_graus = -angulo_graus if Direction == "W" else angulo_graus
+    
     time.sleep(5)
     
     return angulo_graus
