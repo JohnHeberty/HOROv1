@@ -1,6 +1,7 @@
 from selenium.webdriver.chrome.options import Options
-from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium import webdriver
+import platform 
 import zipfile
 import shutil
 import os
@@ -16,9 +17,13 @@ class CBrowser():
         self.BaseUrl = "https://www.google.com.br"
         self.Driver = None
         self.timeout_load = 60
-        self.path_browserdriver = os.path.join("Modulos", "BROWSER", "chrome-win")
-        self.CleanChrome()
-        self.ExtractZip()
+        self.system = platform.system()
+        if self.system == "Windows":
+            self.path_browserdriver = os.path.join("Modulos", "BROWSER", "chrome-win")
+            self.CleanChrome()
+            self.ExtractZip()
+        elif self.system == "Linux":
+            self.path_browserdriver = os.path.join("usr", "lib", "chromium-browser", "chromedriver")
         
     def CleanChrome(self) -> bool:
         if os.path.exists(self.path_browserdriver):
@@ -39,8 +44,9 @@ class CBrowser():
     
     def OpenBrowser(self):
         # Paths
-        path_browser_exe = os.path.join(os.getcwd(), self.path_browserdriver, "chrome.exe")
-        path_driver = os.path.join(os.getcwd(), self.path_browserdriver, "chromedriver.exe")
+        if self.system == "Windows":
+            path_browser_exe = os.path.join(os.getcwd(), self.path_browserdriver, "chrome.exe")
+            path_driver = os.path.join(os.getcwd(), self.path_browserdriver, "chromedriver.exe")
 
         # Configurando opções do Chrome
         chrome_options = webdriver.ChromeOptions()  # Options()  webdriver.ChromeOptions()
@@ -51,14 +57,17 @@ class CBrowser():
         chrome_options.add_argument("--headless") # Executa o Chrome em modo headless (sem interface gráfica)
         chrome_options.add_argument("--no-sandbox") # Desabilita o sandbox para evitar problemas de permissões
         chrome_options.add_argument("--disable-dev-shm-usage") # Desabilita o uso de /dev/shm para evitar problemas de memória compartilhada
-        chrome_options.binary_location = path_browser_exe
-
-        try:
-            self.driver = webdriver.Chrome(executable_path=path_driver, options=chrome_options)
-        except Exception as e:
-            service = Service(executable_path=path_driver)
-            self.driver = webdriver.Chrome(service=service, options=chrome_options)
-            
+        
+        if self.system == "Windows":
+            chrome_options.binary_location = path_browser_exe
+            try:
+                self.driver = webdriver.Chrome(executable_path=path_driver, options=chrome_options)
+            except Exception as e:
+                service = Service(executable_path=path_driver)
+                self.driver = webdriver.Chrome(service=service, options=chrome_options)
+        elif self.system == "Linux":
+            self.driver = webdriver.Chrome(executable_path=self.path_browserdriver, options=chrome_options)
+        
         self.driver.set_page_load_timeout(self.timeout_load * 5)
         self.driver.get(self.BaseUrl)
         
