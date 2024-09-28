@@ -152,6 +152,7 @@ cython_debug/
 #.idea/
 
 README-EDIT.md
+FinalResult.json
 Modulos/BROWSER/chrome-win/
 2-OUTPUT/Movies/IMGS/*.jpg
 Modulos/DADOS/TREATED/*.pickle
