@@ -1,128 +1,170 @@
 import pandas as pd
 import numpy as np
+import warnings
 import pickle
 import os
 
-# FUNÇÃO PARA LER OS DADOS, NÃO HÁ DEFINIÇÃO DE UNICODE DOS DADOS DE ENNTRADA
-def ReadDatasets(Paths, DecimalPlaces=3, MtoNo=1.944, reanalysis=False, SaveAnalysis=""):
-    """
-    MtoNo = RAZÃO DE METROS/S PARA NÓS/S
-    """
-    
-    pd.set_option('future.no_silent_downcasting', True)
-    
-    DataFiles = {}
-    
-    # BASE PATH
-    FileName = 'DataFiles.pickle'
-    path_pickle = os.path.join(SaveAnalysis, FileName)
-    
-    # SE O PICKLE NÃO EXISTIR
-    if os.path.exists(path_pickle) is False or reanalysis is True:
-        
-        # PERCORRENDO OS PATHS
-        for filePath in Paths:
-            print(f"READ PATH: {filePath}")
-            with open(filePath,"r") as file:
-                text_lines = file.readlines()
-                Name = [row.strip() for row in text_lines[0].strip().split("Nome:") if row != ""][0]
-                Latitude = [row.strip() for row in text_lines[2].strip().split("Latitude:") if row != ""][0]
-                Longitude = [row.strip() for row in text_lines[3].strip().split("Longitude:") if row != ""][0]
-                Altitude = [row.strip() for row in text_lines[4].strip().split("Altitude:") if row != ""][0]
-                title = text_lines[10].strip()[:-1].split(";")
-                dataset = text_lines[11:]
-                dataset = [line.strip()[:-1].split(";") for line in dataset]
-                dataset = [line for line in dataset if line[0] != ""]
-                dataset = [{title[index]:line[index] for index in range(len(title))} for line in dataset]
-                df = pd.DataFrame(dataset)
-                df["DATA"] = (df[df.columns[0]] + " " + df[df.columns[1]]).apply(lambda x: str(x).strip())
-                datas = []
-                for data in df["DATA"].values:
-                    if ":00:00" in data:
-                        data = data.replace(":00:00",":00")
-                    if len(data.split()[1].split(":")[0].strip())==1:
-                        data = data.replace(" "," 0")
-                    datas.append(data)
-                df["DATA"] = datas
-                formats = ["%Y-%m-%d %H%M", "%d-%m-%Y %H%M", "%d/%m/%Y %H%M", "%d/%m/%Y %H:%M"]
-                for format in formats:
-                    try:
-                        df["DATA"] = pd.to_datetime(df["DATA"], format=format)
-                    except Exception as e:
-                        print(e)
-                # list([row for row in df.columns if "TEMPERATURA ORVALHO MAX" in row]) + \
-                # list([row for row in df.columns if "TEMPERATURA ORVALHO MIN" in row]) + \
-                # list([row for row in df.columns if "PRESSAO ATMOSFERICA MAX" in row]) + \
-                # list([row for row in df.columns if "PRESSAO ATMOSFERICA MIN" in row]) + \
-                # columns = ["DATA"] + list([row for row in df.columns if "UMIDADE RELATIVA" in row])
-                # columns = columns  + list([row for row in df.columns if "TEMPERATURA DO PONTO DE ORVALHO" in row])
-                # columns = columns  + list([row for row in df.columns if "TEMPERATURA MINIMA" in row])
-                # columns = columns  + list([row for row in df.columns if "TEMPERATURA MAXIMA" in row])
-                # columns = columns  + list([row for row in df.columns if "BULBO SECO" in row])
-                # columns = columns  + list([row for row in df.columns if "PRESSAO" in row and "ESTACAO" in row])
-                # columns = columns  + list([row for row in df.columns if "PRESSAO" in row and "MAR" in row])
-                columns = ["DATA"]
-                DIRECAO = list([row for row in df.columns if "DIRECAO" in row])
-                columns = columns  + DIRECAO
-                VENTO_MAX_AUTO = list([row for row in df.columns if ("VENTO" in row and "RAJADA" in row)])
-                VENTO_NORM = list([row for row in df.columns if ("VENTO" in row and "VELOCIDADE" in row and "RAJADA" not in row)])
-                VENTO = (VENTO_MAX_AUTO if len(VENTO_MAX_AUTO) > 0 else VENTO_NORM)
-                columns = columns + VENTO
-                df = df[columns].copy()
-                for column in [row for row in df.columns if "DATA" not in row]:
-                    df[column] = df[column].replace(["None", "none", "null", "Null", ""], np.nan).infer_objects(copy=False)
-                # DROPANDO VALORES NULOS NO VENTO E DIRECAO
-                df.loc[df[VENTO + DIRECAO].dropna(axis=0).index]
-                df = df.reset_index(drop=True)
-                df.columns = [
-                    "DATA",
-                    # f"UMIDADE RELATIVA",
-                    #f"TEMPERATURA DO PONTO DE ORVALHO",
-                    # f"TEMPERATURA MINIMA",
-                    # f"TEMPERATURA MAXIMA",
-                    # f"TEMPERATURA ORVALHO MAX",
-                    # f"TEMPERATURA ORVALHO MIN",
-                    # f"BULBO SECO",
-                    # f"PRESSAO ATMOSFERICA MAX",
-                    # f"PRESSAO ATMOSFERICA MIN",
-                    #f"PRESSAO AO NIVEL DA ESTACAO",
-                    #f"PRESSAO AO NIVEL DO MAR",
-                    f"DIRECAO",
-                    f"VENTO",
-                ]
-                def Convert(x):
-                    x = str(x).replace(",",".")
-                    try:
-                        return float(x)
-                    except Exception as e:
-                        return x
-                for column in [row for row in df.columns if "DATA" not in row]:
-                    df[column] = df[column].apply(lambda x: Convert(x))
-                    df[column] = df[column].apply(lambda x: round(x, DecimalPlaces))
-                df = df.drop_duplicates()
-                # ELIMINANDO VENTOS ZERADOS
-                df = df[df[df.columns[-1]]>0]
-                # TRANSFORMANDO M/S PARA NÓS/S
-                df[df.columns[-1]] = df[df.columns[-1]].apply(lambda x:  round(x * MtoNo, DecimalPlaces))
-                df = df.sort_values(["DATA"]).reset_index(drop=True)
-                DataFiles[Name] = {
-                    "Local": (eval(Latitude), eval(Longitude)), 
-                    "Altidude": Altitude, 
-                    "Dataset": df,
-                    "Name File": os.path.basename(filePath),
-                    "Path File": filePath
-                }
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", category=FutureWarning)
 
-        # SE EXISTIR DADOS SALVA O PICKLE
-        if DataFiles != {} and SaveAnalysis != "":
-            with open(path_pickle, 'wb') as arquivo:
-                pickle.dump(DataFiles, arquivo)
-
-    # SE EXISTIR PEGUE DO HISTORICO
-    else:
-        
-        # Carregar o dicionário do arquivo usando pickle
-        with open(path_pickle, 'rb') as arquivo:
-            DataFiles = pickle.load(arquivo)
+class DatasetReader:
     
-    return DataFiles
+    def __init__(self, 
+        paths, 
+        decimal_places=3, 
+        m_to_knots=1.944, 
+        reanalysis=False, 
+        sep=";", 
+        vento="VELOCIDADE HORARIA", 
+        direcao="DIRECAO HORARIA"
+    ):
+        """
+        Inicializa o DatasetReader com parâmetros fornecidos.
+        
+        :param paths: Lista de caminhos de arquivos.
+        :param decimal_places: Casas decimais para arredondamento.
+        :param m_to_knots: Fator de conversão de m/s para nós.
+        :param reanalysis: Se True, força a reanálise dos arquivos.
+        :param save_analysis: Caminho para salvar o arquivo pickle.
+        """
+        self.sep = sep
+        self.vento = vento
+        self.direcao = direcao
+        self.paths = paths
+        self.decimal_places = decimal_places
+        self.m_to_knots = m_to_knots
+        self.reanalysis = reanalysis
+        self.save_analysis = os.path.join("Modulos","DADOS","TREATED")
+        self.data_files = {}
+
+    def read_datasets(self):
+        """
+        Lê os arquivos de dados ou carrega de um pickle existente.
+        """
+        path_pickle = os.path.join(self.save_analysis, 'DataFiles.pickle')
+
+        if not os.path.exists(path_pickle) or self.reanalysis:
+            for file_path in self.paths:
+                self.process_file(file_path)
+
+            if self.data_files and self.save_analysis:
+                self.save_to_pickle(path_pickle)
+        else:
+            self.load_from_pickle(path_pickle)
+
+        return self.data_files
+
+    def process_file(self, file_path):
+        """
+        Processa um único arquivo de dados meteorológicos.
+        """
+        print(f"READING FILE: {file_path}")
+        with open(file_path, "r") as file:
+            text_lines = file.readlines()
+
+        name, latitude, longitude, altitude = self.extract_metadata(text_lines)
+        dataset = self.create_dataframe(text_lines)
+        dataset = self.clean_data(dataset)
+        dataset = self.transform_wind_speed(dataset)
+        
+        self.data_files[name] = {
+            "Location": (eval(latitude), eval(longitude)),
+            "Altitude": altitude,
+            "Dataset": dataset,
+            "File Name": os.path.basename(file_path),
+            "Path File": file_path
+        }
+
+    def extract_metadata(self, text_lines):
+        """
+        Extrai metadados do arquivo.
+        """
+        name = self.extract_value(text_lines[0], "Nome:")
+        latitude = self.extract_value(text_lines[2], "Latitude:")
+        longitude = self.extract_value(text_lines[3], "Longitude:")
+        altitude = self.extract_value(text_lines[4], "Altitude:")
+        return name, latitude, longitude, altitude
+
+    @staticmethod
+    def extract_value(text_line, label):
+        """
+        Extrai valores com base no rótulo.
+        """
+        return [item.strip() for item in text_line.strip().split(label) if item][0]
+
+    def create_dataframe(self, text_lines):
+        """
+        Cria um DataFrame a partir do conteúdo do arquivo.
+        """
+        for n, line in enumerate(text_lines): 
+            if self.sep in line: break
+        title   = [row for row in text_lines[n].strip().split(self.sep)]
+        data    = [line.strip().split(self.sep) for line in text_lines[n+1:] if line.strip() != ""]
+        df      = pd.DataFrame(data, columns=title)
+        df["DATA"] = pd.to_datetime(self.format_dates(df))
+        return df[[row for row in df.columns if row.strip() != ""]]
+
+    def format_dates(self, df):
+        """
+        Formata as datas do DataFrame.
+        """
+        formats = ["%Y-%m-%d %H%M", "%d-%m-%Y %H%M", "%d/%m/%Y %H%M", "%d/%m/%Y %H:%M"]
+        df["DATA"] = df[df.columns[0]] + " " + df[df.columns[1]]
+        for fmt in formats:
+            try:
+                return pd.to_datetime(df["DATA"], format=fmt)
+            except ValueError:
+                pass
+        return df["DATA"]
+
+    def clean_data(self, df):
+        """
+        Limpa e formata o DataFrame removendo valores nulos e aplicando conversões.
+        """
+        columns =   ["DATA"] + \
+                    self.get_columns_by_keyword(df, self.sep) + \
+                    self.get_columns_by_keyword(df, self.vento, exclude="RAJADA")
+        df = df[columns].copy()
+        for col in columns[1:]:
+            df[col] = df[col].replace(["None", "null", ""], np.nan).infer_objects(copy=False)
+            df.iloc[:, df.columns.get_loc(col)] = df.iloc[:, df.columns.get_loc(col)].apply(self.convert_to_float)
+        return df.reset_index(drop=True)
+
+    def transform_wind_speed(self, df):
+        """
+        Converte a velocidade do vento de metros/s para nós/s.
+        """
+        wind_column = df.columns[-1]
+        df[wind_column] = df[wind_column].apply(lambda x: round(x * self.m_to_knots, self.decimal_places))
+        return df[df[wind_column] > 0].sort_values("DATA").reset_index(drop=True)
+
+    @staticmethod
+    def get_columns_by_keyword(df, keyword, exclude=None):
+        """
+        Retorna colunas que contêm a palavra-chave, excluindo as que contêm a palavra de exclusão (se fornecida).
+        """
+        return [col for col in df.columns if keyword in col and (exclude is None or exclude not in col)]
+
+    @staticmethod
+    def convert_to_float(value):
+        """
+        Converte valores para float, tratando exceções.
+        """
+        try:
+            return round(float(str(value).replace(",", ".")), 3)
+        except ValueError:
+            return np.nan
+
+    def save_to_pickle(self, path_pickle):
+        """
+        Salva os dados no formato pickle.
+        """
+        with open(path_pickle, 'wb') as file:
+            pickle.dump(self.data_files, file)
+
+    def load_from_pickle(self, path_pickle):
+        """
+        Carrega os dados do arquivo pickle.
+        """
+        with open(path_pickle, 'rb') as file:
+            self.data_files = pickle.load(file)

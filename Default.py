@@ -9,7 +9,9 @@ Url_MagneticDeclination = "https://ngdc.noaa.gov/geomag/calculators/magcalc.shtm
 DirectionName           = "DIRECAO"                 # NOME COMUM ENTRE OS BANCOS PARA O RUMO DO VENTO
 WindName                = "VENTO"                   # NOME COMUM ENTRE OS BANCOS PARA O VENTO
 DecimalPlaces           = 3                         # ARREDONDADMENTO EM 3 CASAS DESCIMAIS
-RoseWind                = 4                        # QUANTIDADE DE BARRAS QUE RODA DOS VENTOS TERA
+RoseWind                = 16                        # QUANTIDADE DE BARRAS QUE RODA DOS VENTOS TERA
+LIMITES_IN_PPD          = [3,   13, 20]             # Limites dentro da PPD
+LIMITES_OUT_PPD         = [20,  25, 40]             # Limites fora da PPD
 LIMITES                 = [3,   13, 20, 25, 40]     # Limites para a Rosas dos Ventos Segundo RBAC154 P/ RUNWAY >= 1500m
 WindRunwayLimite        = 20                        # VENTOS MENORES QUE ESTE VALOR SERÁ VENTOS DENTRO DA PISTA, CASO SEJA MAIOR E VENTO DE TRAVEZ - COM BASE NA RBAC154
 SectorNames             = {                         # Nome dos Possiveis Nomes para setores padrões
@@ -21,6 +23,7 @@ SectorNames             = {                         # Nome dos Possiveis Nomes p
 # VARIAVEIS PARA OTIMIZAÇÃO DE PISTA
 Width_IMG               = 1920#3840                 # LARGURA DA IMAGEM QUE SERA CRIADA A SIMULAÇÃO (Afeta o desempenho)
 Height_IMG              = 1080#2160                 # ALTURA DA IMAGEM QUE SERA CRIADA A SIMULAÇÃO (Afeta o desempenho)
+SpeedGIF                = 4                         # ACELERA O VIDEO PARA GIF EM X VEZES
 ProportionWindRoseImg   = 0.20                      # E COM BASE NO RAIO LOGO OCUPA 2X DA IMAGEM
 FonteThickness          = 1                         # ESPESSURA DA FONTE DENTRO DA IMAGEM
 FonteSize               = 0.90                      # TAMANHO DA FONTE DENTRO DA IMAGEM
@@ -38,7 +41,7 @@ ColorPointRef           = (255, 165, 0)             # COR DO PONTO DE REFERENCIA
 PointSizeRef            = 25                        # TAMANHO DO PONTO DE REFERENCIA DA PISTA
 
 # PATHS - NÃO MODIFIQUE CAUSARÁ ERROS
-FolderImages            = os.path.join(os.getcwd(), "Movies", "IMGS")
-caminho_saida_video     = os.path.join(os.getcwd(), "Movies", "{}", "RunwayOrientation-{}.mp4")
-WeatherStationsPath     = glob(os.path.join("INPUT", "*.csv"))          # ARQUIVOS PARA ANALISE
+FolderImages            = os.path.join(os.getcwd(), "2-OUTPUT", "Movies", "IMGS")
+caminho_saida_video     = os.path.join(os.getcwd(), "2-OUTPUT", "Movies", "{}", "RunwayOrientation-{}.mp4")
+WeatherStationsPath     = glob(os.path.join("1-INPUT", "*.csv"))          # ARQUIVOS PARA ANALISE
 WeatherStationsPath_OK  = os.path.join("Modulos", "DADOS", "TREATED")   # ARQUIVOS JÁ TRATADOS

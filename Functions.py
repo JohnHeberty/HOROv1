@@ -2,7 +2,7 @@
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
-from  .cluster import KMeans
+from sklearn.cluster import KMeans
 from datetime import datetime
 from glob import glob
 import numpy as np
@@ -12,8 +12,8 @@ import time
 import os
 
 from Modulos.BROWSER.Engine import *
+from Modulos.SITRAER import *
 from Functions import *
-from Script1 import *
 
 # DESENVOLVIDO POR JOHN HEBERTY DE FREITAS
 # E-mail: john.7heberty@gmail.com
