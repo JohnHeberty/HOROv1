@@ -154,6 +154,7 @@ cython_debug/
 README-EDIT.md
 Modulos/BROWSER/chrome-win/
 2-OUTPUT/Movies/IMGS/*.jpg
+Modulos/DADOS/TREATED/*.pickle
 *.csv
 *.mp4
 *.gif
