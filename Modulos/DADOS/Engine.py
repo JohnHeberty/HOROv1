@@ -15,8 +15,8 @@ class DatasetReader:
         m_to_knots=1.944, 
         reanalysis=False, 
         sep=";", 
-        vento="VELOCIDADE HORARIA", 
-        direcao="DIRECAO HORARIA"
+        vento="VENTO", 
+        direcao="DIRECAO"
     ):
         """
         Inicializa o DatasetReader com parâmetros fornecidos.
@@ -67,6 +67,7 @@ class DatasetReader:
         dataset = self.create_dataframe(text_lines)
         dataset = self.clean_data(dataset)
         dataset = self.transform_wind_speed(dataset)
+        dataset.columns = ["DATA", self.direcao, self.vento]
         
         self.data_files[name] = {
             "Location": (eval(latitude), eval(longitude)),
@@ -99,10 +100,10 @@ class DatasetReader:
         """
         for n, line in enumerate(text_lines): 
             if self.sep in line: break
-        title   = [row for row in text_lines[n].strip().split(self.sep)]
-        data    = [line.strip().split(self.sep) for line in text_lines[n+1:] if line.strip() != ""]
-        df      = pd.DataFrame(data, columns=title)
-        df["DATA"] = pd.to_datetime(self.format_dates(df))
+        title       = [row.strip() for row in text_lines[n].split(self.sep)]
+        data        = [line.split(self.sep) for line in text_lines[n+1:] if line.strip() != ""]
+        df          = pd.DataFrame(data, columns=title)
+        df["DATA"]  = pd.to_datetime(self.format_dates(df))
         return df[[row for row in df.columns if row.strip() != ""]]
 
     def format_dates(self, df):
@@ -122,9 +123,10 @@ class DatasetReader:
         """
         Limpa e formata o DataFrame removendo valores nulos e aplicando conversões.
         """
-        columns =   ["DATA"] + \
-                    self.get_columns_by_keyword(df, self.sep) + \
-                    self.get_columns_by_keyword(df, self.vento, exclude="RAJADA")
+        columns  =   ["DATA"]
+        columns +=  self.get_columns_by_keyword(df, self.direcao)
+        columns +=  self.get_columns_by_keyword(df, self.vento, exclude="RAJADA")
+        
         df = df[columns].copy()
         for col in columns[1:]:
             df[col] = df[col].replace(["None", "null", ""], np.nan).infer_objects(copy=False)
@@ -144,7 +146,7 @@ class DatasetReader:
         """
         Retorna colunas que contêm a palavra-chave, excluindo as que contêm a palavra de exclusão (se fornecida).
         """
-        return [col for col in df.columns if keyword in col and (exclude is None or exclude not in col)]
+        return list(pd.Series([col for col in df.columns if keyword in col and (exclude is None or exclude not in col)]).unique())
 
     @staticmethod
     def convert_to_float(value):

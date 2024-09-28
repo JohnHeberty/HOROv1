@@ -7,7 +7,7 @@ import os
 
 Url_MagneticDeclination = "https://ngdc.noaa.gov/geomag/calculators/magcalc.shtml"
 DirectionName           = "DIRECAO"                 # NOME COMUM ENTRE OS BANCOS PARA O RUMO DO VENTO
-WindName                = "VENTO"                   # NOME COMUM ENTRE OS BANCOS PARA O VENTO
+WindName                = "VENTO, VELOCIDADE"       # NOME COMUM ENTRE OS BANCOS PARA O VENTO
 DecimalPlaces           = 3                         # ARREDONDADMENTO EM 3 CASAS DESCIMAIS
 RoseWind                = 16                        # QUANTIDADE DE BARRAS QUE RODA DOS VENTOS TERA
 LIMITES_IN_PPD          = [3,   13, 20]             # Limites dentro da PPD
@@ -32,7 +32,7 @@ StartLegendRight        = Width_IMG - 510           # ONDE COMEÇA A ESCREVER A 
 StartLegendLeft         = 40                        # ONDE COMEÇA A ESCREVER A LEGENDA NA PARTE ESQUERDA
 HeightEspaceLegend      = 40                        # ESPAÇO ENTRE AS LEGENDAS
 Fonte                   = cv.FONT_HERSHEY_SIMPLEX   # FONTE A SER USADA NA SIMULAÇÃO
-MakeVideo               = True                     # SE ATIVADO IRÁ PRODUZIR UM VIDEO NO FINAL
+MakeVideo               = True                      # SE ATIVADO IRÁ PRODUZIR UM VIDEO NO FINAL
 SaveFinalEsult          = True                      # SE ATIVADO IRÁ SALVAR RESULTADOS EM JSON
 ColorRunWay             = (255, 255, 255)           # COR DA PISTA A SER DESENHADA NA ROSA DOS VENTOS
 ColorLegend_BottomLeft  = (255, 255, 255)           # COR DA LEGENDA INFERIRO ESQUERDA 
@@ -43,5 +43,5 @@ PointSizeRef            = 25                        # TAMANHO DO PONTO DE REFERE
 # PATHS - NÃO MODIFIQUE CAUSARÁ ERROS
 FolderImages            = os.path.join(os.getcwd(), "2-OUTPUT", "Movies", "IMGS")
 caminho_saida_video     = os.path.join(os.getcwd(), "2-OUTPUT", "Movies", "{}", "RunwayOrientation-{}.mp4")
-WeatherStationsPath     = glob(os.path.join("1-INPUT", "*.csv"))          # ARQUIVOS PARA ANALISE
+WeatherStationsPath     = glob(os.path.join("1-INPUT", "*.csv"))        # ARQUIVOS PARA ANALISE
 WeatherStationsPath_OK  = os.path.join("Modulos", "DADOS", "TREATED")   # ARQUIVOS JÁ TRATADOS
