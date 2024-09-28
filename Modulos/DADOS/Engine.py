@@ -70,7 +70,7 @@ class DatasetReader:
         dataset.columns = ["DATA", self.direcao, self.vento]
         
         self.data_files[name] = {
-            "Location": (eval(latitude), eval(longitude)),
+            "Local": (eval(latitude), eval(longitude)),
             "Altitude": altitude,
             "Dataset": dataset,
             "File Name": os.path.basename(file_path),
