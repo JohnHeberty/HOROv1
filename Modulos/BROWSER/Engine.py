@@ -23,7 +23,7 @@ class CBrowser():
             self.CleanChrome()
             self.ExtractZip()
         elif self.system == "Linux":
-            self.path_browserdriver = os.path.join("usr", "lib", "chromium-browser", "chromedriver")
+            self.path_browserdriver = os.path.join("/","usr", "lib", "chromium-browser", "chromedriver")
         
     def CleanChrome(self) -> bool:
         if os.path.exists(self.path_browserdriver):
