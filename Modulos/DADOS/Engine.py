@@ -35,6 +35,7 @@ class DatasetReader:
         self.m_to_knots = m_to_knots
         self.reanalysis = reanalysis
         self.save_analysis = os.path.join("Modulos","DADOS","TREATED")
+        if not os.path.exists(self.save_analysis): os.makedirs(self.save_analysis)
         self.data_files = {}
 
     def read_datasets(self):
