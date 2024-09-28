@@ -453,8 +453,8 @@ def HeadboardRunway(PISTA):
 def CreateVideo(FolderImages, caminho_saida_video, largura=1920, altura=1080, fps=10):
     
     # Lista todas as imagens na pasta
-    imagens = sorted(glob(os.path.join(f"{FolderImages}", "*jpg")), key=lambda x: int(x.split(".")[0].split("\\")[-1].replace("IMG","")))
-
+    imagens = sorted(glob(os.path.join(f"{FolderImages}", "*jpg")), key=lambda x: int("".join([row for row in os.path.basename(x) if row.isdigit()])))
+    
     # Define o codec de vídeo
     codec = cv.VideoWriter_fourcc(*'XVID')
 
