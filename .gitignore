@@ -155,6 +155,7 @@ README-EDIT.md
 Modulos/BROWSER/chrome-win/
 2-OUTPUT/Movies/IMGS/*.jpg
 Modulos/DADOS/TREATED/*.pickle
+1-INPUT/*.csv
 *.csv
 *.mp4
 *.gif
