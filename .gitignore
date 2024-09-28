@@ -152,8 +152,8 @@ cython_debug/
 #.idea/
 
 README-EDIT.md
-/Modulos/BROWSER/chrome-win/
-/2-OUTPUT/Movies/IMGS/
-.csv
-.mp4
-.gif
+Modulos/BROWSER/chrome-win/
+2-OUTPUT/Movies/IMGS/*.jpg
+*.csv
+*.mp4
+*.gif
