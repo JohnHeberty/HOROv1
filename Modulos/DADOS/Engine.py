@@ -16,7 +16,8 @@ class DatasetReader:
         reanalysis=False, 
         sep=";", 
         vento="VENTO", 
-        direcao="DIREÇÃO"
+        direcao="DIREÇÃO",
+        encoding="ISO-8859-1"
     ):
         """
         Inicializa o DatasetReader com parâmetros fornecidos.
@@ -29,6 +30,7 @@ class DatasetReader:
         """
         self.sep = sep
         self.vento = vento
+        self.encoding = encoding
         self.direcao = direcao
         self.paths = paths
         self.decimal_places = decimal_places
@@ -60,7 +62,7 @@ class DatasetReader:
         Processa um único arquivo de dados meteorológicos.
         """
         print(f"READING FILE: {file_path}")
-        with open(file_path, "r") as file:
+        with open(file_path, "r", encoding=self.encoding) as file:
             text_lines = file.readlines()
 
         name, latitude, longitude, altitude = self.extract_metadata(text_lines)
