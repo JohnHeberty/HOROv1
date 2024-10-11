@@ -16,7 +16,7 @@ class DatasetReader:
         reanalysis=False, 
         sep=";", 
         vento="VENTO", 
-        direcao="DIRECAO"
+        direcao="DIREÇÃO"
     ):
         """
         Inicializa o DatasetReader com parâmetros fornecidos.
@@ -64,6 +64,7 @@ class DatasetReader:
             text_lines = file.readlines()
 
         name, latitude, longitude, altitude = self.extract_metadata(text_lines)
+        print(name, latitude, longitude, altitude)
         dataset = self.create_dataframe(text_lines)
         dataset = self.clean_data(dataset)
         dataset = self.transform_wind_speed(dataset)
@@ -81,25 +82,28 @@ class DatasetReader:
         """
         Extrai metadados do arquivo.
         """
-        name = self.extract_value(text_lines[0], "Nome:")
-        latitude = self.extract_value(text_lines[2], "Latitude:")
-        longitude = self.extract_value(text_lines[3], "Longitude:")
-        altitude = self.extract_value(text_lines[4], "Altitude:")
+        name = self.extract_value(text_lines,       "ESTACAO:",     self.sep)
+        latitude = self.extract_value(text_lines,   "LATITUDE:",    self.sep)
+        longitude = self.extract_value(text_lines,  "LONGITUDE:",   self.sep)
+        altitude = self.extract_value(text_lines,   "ALTITUDE:",    self.sep)
         return name, latitude, longitude, altitude
 
     @staticmethod
-    def extract_value(text_line, label):
+    def extract_value(text_lines, label, sep=";"):
         """
         Extrai valores com base no rótulo.
         """
-        return [item.strip() for item in text_line.strip().split(label) if item][0]
+        for text_line in text_lines: 
+            if label in text_line: break
+        
+        return [item.strip() for item in text_line.strip().split(label) if item][0].replace(sep, "")
 
     def create_dataframe(self, text_lines):
         """
         Cria um DataFrame a partir do conteúdo do arquivo.
         """
         for n, line in enumerate(text_lines): 
-            if self.sep in line: break
+            if self.sep in line and len(line.split(self.sep)) > 2: break
         title       = [row.strip() for row in text_lines[n].split(self.sep)]
         data        = [line.split(self.sep) for line in text_lines[n+1:] if line.strip() != ""]
         df          = pd.DataFrame(data, columns=title)
@@ -125,7 +129,7 @@ class DatasetReader:
         """
         columns  =   ["DATA"]
         columns +=  self.get_columns_by_keyword(df, self.direcao)
-        columns +=  self.get_columns_by_keyword(df, self.vento, exclude="RAJADA")
+        columns +=  self.get_columns_by_keyword(df, self.vento, exclude1=self.direcao, exclude2="RAJADA")
         
         df = df[columns].copy()
         for col in columns[1:]:
@@ -142,11 +146,11 @@ class DatasetReader:
         return df[df[wind_column] > 0].sort_values("DATA").reset_index(drop=True)
 
     @staticmethod
-    def get_columns_by_keyword(df, keyword, exclude=None):
+    def get_columns_by_keyword(df, keyword, exclude1=None, exclude2=None):
         """
         Retorna colunas que contêm a palavra-chave, excluindo as que contêm a palavra de exclusão (se fornecida).
         """
-        return list(pd.Series([col for col in df.columns if keyword in col and (exclude is None or exclude not in col)]).unique())
+        return list(pd.Series([col for col in df.columns if keyword in col and (exclude1 is None or exclude1 not in col) and (exclude2 is None or exclude2 not in col)]).unique())
 
     @staticmethod
     def convert_to_float(value):
