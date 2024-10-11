@@ -98,7 +98,7 @@ class DatasetReader:
         for text_line in text_lines: 
             if label in text_line: break
         
-        return [item.strip() for item in text_line.strip().split(label) if item][0].replace(sep, "")
+        return [item.strip() for item in text_line.strip().split(label) if item][0].replace(sep, "").replace(",", ".")
 
     def create_dataframe(self, text_lines):
         """
