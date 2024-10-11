@@ -43,5 +43,7 @@ PointSizeRef            = 25                        # TAMANHO DO PONTO DE REFERE
 # PATHS - NÃO MODIFIQUE CAUSARÁ ERROS
 FolderImages            = os.path.join(os.getcwd(), "2-OUTPUT", "Movies", "IMGS")
 caminho_saida_video     = os.path.join(os.getcwd(), "2-OUTPUT", "Movies", "{}", "RunwayOrientation-{}.mp4")
-WeatherStationsPath     = glob(os.path.join("1-INPUT", "*.csv"))        # ARQUIVOS PARA ANALISE
+WeatherStationsPath     =   glob(os.path.join("1-INPUT", "*.csv")) \
+                            if len(glob(os.path.join("1-INPUT", "*.csv"))) > 0 \
+                            else glob(os.path.join("1-INPUT", "*.CSV")) # ARQUIVOS PARA ANALISE
 WeatherStationsPath_OK  = os.path.join("Modulos", "DADOS", "TREATED")   # ARQUIVOS JÁ TRATADOS
