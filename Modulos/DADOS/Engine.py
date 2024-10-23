@@ -69,10 +69,16 @@ class DatasetReader:
         name, latitude, longitude, altitude = self.extract_metadata(text_lines)
         print("  ",name, latitude, longitude, altitude)
         dataset = self.create_dataframe(text_lines)
+        print(dataset.columns)
         dataset = self.clean_data(dataset)
+        print(dataset.columns)
         dataset = self.transform_wind_speed(dataset)
-        dataset.columns = ["DATA", self.direcao, self.vento]
-        
+        print(dataset.columns)
+        try:
+            dataset.columns = ["DATA", self.direcao, self.vento]
+        except ValueError as e:
+            colunas = str(dataset.columns.values)
+            raise ValueError(f"Error: Mais ou menos de uma coluna como resultado final para vento ou direção. Colunas Dataset: {colunas}. Esperado: 3 colunas ['DATA', '{self.direcao}', '{self.vento}']. Erro original: {str(e)}")        
         self.data_files[name] = {
             "Local": (eval(latitude), eval(longitude)),
             "Altitude": altitude,
@@ -114,16 +120,33 @@ class DatasetReader:
         df["DATA"]  = pd.to_datetime(self.format_dates(df))
         return df[[row for row in df.columns if row.strip() != ""]]
 
-    def format_dates(self, df):
+    def format_dates(self, df, Ncol_Data="Data", Ncol_Hora="Hora"):
         """
         Formata as datas do DataFrame.
         """
-        formats = ["%Y-%m-%d %H%M", "%d-%m-%Y %H%M", "%d/%m/%Y %H%M", "%d/%m/%Y %H:%M"]
-        df["DATA"] = (df[df.columns[0]] + " " + df[df.columns[1]]).apply(lambda x: x.replace("UTC" ,"").replace("UTM" ,"").strip())
+        formats = [
+            "%Y-%m-%d %H%M", "%d-%m-%Y %H%M", 
+            "%d/%m/%Y %H%M", "%Y/%m/%d %H%M"
+            "%d/%m/%Y %H:%M"
+        ]
+        try:
+            col_Data =      [row for row in df.columns if Ncol_Data.upper().strip() in row.upper().strip()][0]
+        except IndexError as e:
+            raise IndexError(f"Error: Nome Data não foi localizado no bando de dados. Erro original: {str(e)}")
+        try:
+            col_Hora =      [row for row in df.columns if Ncol_Hora.upper().strip() in row.upper().strip()][0]
+        except IndexError as e:
+            raise IndexError(f"Error: Nome Hora não foi localizado no bando de dados. Erro original: {str(e)}")
+        df[col_Hora] = df[col_Hora].apply(lambda x: x.replace("UTC" ,"").replace("UTM" ,"").strip())
+        df[col_Hora] = df[col_Hora].apply(lambda x: x.replace("0000","00:00"))
+        df[col_Hora] = df[col_Hora].apply(lambda x: x.replace("1000","10:00"))
+        df[col_Hora] = df[col_Hora].apply(lambda x: x.replace("2000","20:00"))
+        df[col_Hora] = df[col_Hora].apply(lambda x: x.replace("00",":00") if ":00" not in x else x)
+        df["DATA"] = (df[col_Data] + " " + df[col_Hora])
         for fmt in formats:
             try:
                 return pd.to_datetime(df["DATA"], format=fmt)
-            except Exception as e:
+            except:
                 pass
         return df["DATA"]
 
@@ -147,8 +170,8 @@ class DatasetReader:
         """
         try:
             wind_column = [row for row in df.columns if self.vento.upper().strip() in row.upper().strip()][0]
-        except Exception as e:
-            raise(f"Parametro 'vento' definido como {self.vento} não localizado nos dados - Errpr: {e}")
+        except IndexError as e:
+            raise IndexError(f"Parametro 'vento' definido como {self.vento} não localizado nos dados. Erro original: {str(e)}")
         df[wind_column] = df[wind_column].apply(lambda x: str(x).replace(",",".").strip())
         df = df[df[wind_column]!=""]
         df.reset_index(drop=True)
