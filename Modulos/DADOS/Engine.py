@@ -40,7 +40,7 @@ class DatasetReader:
         self.save_analysis = os.path.join("Modulos","DADOS","TREATED")
         if not os.path.exists(self.save_analysis): os.makedirs(self.save_analysis)
         self.data_files = {}
-
+    
     def read_datasets(self):
         """
         Lê os arquivos de dados ou carrega de um pickle existente.
@@ -69,11 +69,8 @@ class DatasetReader:
         name, latitude, longitude, altitude = self.extract_metadata(text_lines)
         print("  ",name, latitude, longitude, altitude)
         dataset = self.create_dataframe(text_lines)
-        print(dataset.columns)
         dataset = self.clean_data(dataset)
-        print(dataset.columns)
         dataset = self.transform_wind_speed(dataset)
-        print(dataset.columns)
         try:
             dataset.columns = ["DATA", self.direcao, self.vento]
         except ValueError as e:
@@ -208,3 +205,4 @@ class DatasetReader:
         """
         with open(path_pickle, 'rb') as file:
             self.data_files = pickle.load(file)
+    
