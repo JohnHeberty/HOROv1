@@ -170,8 +170,7 @@ class DatasetReader:
         except IndexError as e:
             raise IndexError(f"Parametro 'vento' definido como {self.vento} não localizado nos dados. Erro original: {str(e)}")
         df[wind_column] = df[wind_column].apply(lambda x: str(x).replace(",",".").strip())
-        df = df[df[wind_column]!=""]
-        df.reset_index(drop=True)
+        df = df[df[wind_column]!=""].reset_index(drop=True)
         df[wind_column] = df[wind_column].apply(lambda x: round(float(x) * self.m_to_knots, self.decimal_places))
         return df[df[wind_column] > 0].sort_values("DATA").reset_index(drop=True)
 

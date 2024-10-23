@@ -469,7 +469,6 @@ def CreateVideo(FolderImages, caminho_saida_video, largura=1920, altura=1080, fp
 
     # Libera os recursos e fecha o vídeo
     video_writer.release()
-    cv.destroyAllWindows()
 
 # CRIANDO OS SETOES
 def calcular_setores(n, name_setores):
