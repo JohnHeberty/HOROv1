@@ -1,0 +1,10 @@
+pandas
+windrose
+matplotlib
+scikit-learn
+opencv-python
+moviepy
+selenium
+webdriver-manager
+Unidecode
+numpy=1.26.4

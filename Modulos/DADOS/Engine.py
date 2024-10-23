@@ -1,3 +1,4 @@
+from unidecode import unidecode
 import pandas as pd
 import numpy as np
 import warnings
@@ -17,7 +18,7 @@ class DatasetReader:
         sep=";", 
         vento="VENTO", 
         direcao="DIREÇÃO",
-        encoding="ISO-8859-1"
+        encoding="ISO 8859-2"
     ):
         """
         Inicializa o DatasetReader com parâmetros fornecidos.
@@ -66,7 +67,7 @@ class DatasetReader:
             text_lines = file.readlines()
 
         name, latitude, longitude, altitude = self.extract_metadata(text_lines)
-        print(name, latitude, longitude, altitude)
+        print("  ",name, latitude, longitude, altitude)
         dataset = self.create_dataframe(text_lines)
         dataset = self.clean_data(dataset)
         dataset = self.transform_wind_speed(dataset)
@@ -95,19 +96,20 @@ class DatasetReader:
         """
         Extrai valores com base no rótulo.
         """
-        for text_line in text_lines: 
+        for text_line in text_lines:
+            text_line = unidecode(text_line.strip()).upper().replace(sep, " ").replace("  ", " ").replace("  ", " ").replace(",", ".")
             if label in text_line: break
-        
-        return [item.strip() for item in text_line.strip().split(label) if item][0].replace(sep, "").replace(",", ".")
+        lines = [item.strip() for item in text_line.strip().split(label) if item != ""]
+        return lines[-1] if len(lines) > 0 else "NÃO LOCALIZADO"
 
     def create_dataframe(self, text_lines):
         """
         Cria um DataFrame a partir do conteúdo do arquivo.
         """
         for n, line in enumerate(text_lines): 
-            if self.sep in line and len(line.split(self.sep)) > 2: break
-        title       = [row.strip() for row in text_lines[n].split(self.sep)]
-        data        = [line.split(self.sep) for line in text_lines[n+1:] if line.strip() != ""]
+            if self.sep in line and len(pd.Series([row for row in line.split(self.sep) if row.strip() != ""]).unique()) > 2: break
+        title       = [unidecode(row. strip()).replace("  ", " ").replace(",", ".") for row in text_lines[n].split(self.sep)]
+        data        = [unidecode(line.strip()).replace("  ", " ").replace(",", ".").split(self.sep) for line in text_lines[n+1:] if line.strip() != ""]
         df          = pd.DataFrame(data, columns=title)
         df["DATA"]  = pd.to_datetime(self.format_dates(df))
         return df[[row for row in df.columns if row.strip() != ""]]
@@ -117,11 +119,11 @@ class DatasetReader:
         Formata as datas do DataFrame.
         """
         formats = ["%Y-%m-%d %H%M", "%d-%m-%Y %H%M", "%d/%m/%Y %H%M", "%d/%m/%Y %H:%M"]
-        df["DATA"] = df[df.columns[0]] + " " + df[df.columns[1]]
+        df["DATA"] = (df[df.columns[0]] + " " + df[df.columns[1]]).apply(lambda x: x.replace("UTC" ,"").replace("UTM" ,"").strip())
         for fmt in formats:
             try:
                 return pd.to_datetime(df["DATA"], format=fmt)
-            except ValueError:
+            except Exception as e:
                 pass
         return df["DATA"]
 
@@ -143,8 +145,14 @@ class DatasetReader:
         """
         Converte a velocidade do vento de metros/s para nós/s.
         """
-        wind_column = df.columns[-1]
-        df[wind_column] = df[wind_column].apply(lambda x: round(x * self.m_to_knots, self.decimal_places))
+        try:
+            wind_column = [row for row in df.columns if self.vento.upper().strip() in row.upper().strip()][0]
+        except Exception as e:
+            raise(f"Parametro 'vento' definido como {self.vento} não localizado nos dados - Errpr: {e}")
+        df[wind_column] = df[wind_column].apply(lambda x: str(x).replace(",",".").strip())
+        df = df[df[wind_column]!=""]
+        df.reset_index(drop=True)
+        df[wind_column] = df[wind_column].apply(lambda x: round(float(x) * self.m_to_knots, self.decimal_places))
         return df[df[wind_column] > 0].sort_values("DATA").reset_index(drop=True)
 
     @staticmethod

@@ -6,8 +6,8 @@ import os
 # E-mail: john.7heberty@gmail.com
 
 Url_MagneticDeclination = "https://ngdc.noaa.gov/geomag/calculators/magcalc.shtml"
-DirectionName           = "DIRECAO"                 # NOME COMUM ENTRE OS BANCOS PARA O RUMO DO VENTO
-WindName                = "VENTO, VELOCIDADE"       # NOME COMUM ENTRE OS BANCOS PARA O VENTO
+DirectionName           = "VENTO. DIRE"                 # NOME COMUM ENTRE OS BANCOS PARA O RUMO DO VENTO
+WindName                = "VENTO. VELO"              # NOME COMUM ENTRE OS BANCOS PARA O VENTO
 DecimalPlaces           = 3                         # ARREDONDADMENTO EM 3 CASAS DESCIMAIS
 RoseWind                = 16                        # QUANTIDADE DE BARRAS QUE RODA DOS VENTOS TERA
 LIMITES_IN_PPD          = [3,   13, 20]             # Limites dentro da PPD
