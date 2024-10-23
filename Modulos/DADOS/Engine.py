@@ -69,7 +69,9 @@ class DatasetReader:
         name, latitude, longitude, altitude = self.extract_metadata(text_lines)
         print("  ",name, latitude, longitude, altitude)
         dataset = self.create_dataframe(text_lines)
+        print("Colunas Iniciais:", dataset.columns)
         dataset = self.clean_data(dataset)
+        print("Colunas Após a Limpeza:", dataset.columns)
         dataset = self.transform_wind_speed(dataset)
         try:
             dataset.columns = ["DATA", self.direcao, self.vento]
@@ -112,6 +114,7 @@ class DatasetReader:
         for n, line in enumerate(text_lines): 
             if self.sep in line and len(pd.Series([row for row in line.split(self.sep) if row.strip() != ""]).unique()) > 2: break
         title       = [unidecode(row. strip()).replace("  ", " ").replace(",", ".") for row in text_lines[n].split(self.sep)]
+        print("Titulo:", title)
         data        = [unidecode(line.strip()).replace("  ", " ").replace(",", ".").split(self.sep) for line in text_lines[n+1:] if line.strip() != ""]
         df          = pd.DataFrame(data, columns=title)
         df["DATA"]  = pd.to_datetime(self.format_dates(df))
@@ -134,7 +137,8 @@ class DatasetReader:
             col_Hora =      [row for row in df.columns if Ncol_Hora.upper().strip() in row.upper().strip()][0]
         except IndexError as e:
             raise IndexError(f"Error: Nome Hora não foi localizado no bando de dados. Erro original: {str(e)}")
-        df[col_Hora] = df[col_Hora].apply(lambda x: x.replace("UTC" ,"").replace("UTM" ,"").strip())
+        df[col_Hora] = df[col_Hora].apply(lambda x: x.replace("(UTC)" ,"").replace("UTC" ,"").replace("UTM" ,"").strip())
+        df[col_Hora] = df[col_Hora].apply(lambda x: "0000" if x.strip() == "0" else x)
         df[col_Hora] = df[col_Hora].apply(lambda x: x.replace("0000","00:00"))
         df[col_Hora] = df[col_Hora].apply(lambda x: x.replace("1000","10:00"))
         df[col_Hora] = df[col_Hora].apply(lambda x: x.replace("2000","20:00"))
